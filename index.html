@@ -196,6 +196,8 @@ tr.rt td{background:var(--bg3);font-weight:700;border-top:2px solid var(--bdr2);
 
 /* DIVIDER */
 hr.div{border:none;border-top:1px solid var(--bdr);margin:16px 0;}
+.reset-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;font-size:11px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;border:1.5px solid var(--rd);border-radius:var(--rsm);background:transparent;color:var(--rd);cursor:pointer;transition:all .15s;margin-bottom:10px;}
+.reset-btn:hover{background:var(--rd);color:white;}
 </style>
 </head>
 <body>
@@ -361,7 +363,7 @@ hr.div{border:none;border-top:1px solid var(--bdr);margin:16px 0;}
     Usamos IPCA+5% como premissa conservadora para os próximos 10 anos (2027–2037) e IPCA+4% para o período final. Hoje o mercado oferece IPCA+6,61% a IPCA+7,10%. Cada ponto percentual capturado acima dessas premissas é retorno adicional não precificado neste modelo. <strong>O gap entre o NTN-B isolado e a meta de R$20MM é coberto com total conforto pelo free float</strong> — que acumula mais de R$20MM real no mesmo período com apenas R$1,2MM/ano a 10% livre de IR.
   </div>
 
-  <p class="sh">Evolução ano a ano · Track 1 (Principal B2050) + Track 2 (Aportes futuros)</p>
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:4px;"><p class="sh" style="margin:0">Evolução ano a ano · Track 1 (Principal B2050) + Track 2 (Aportes futuros)</p><button class="reset-btn" onclick="resetP2()">↺ Restaurar premissas originais</button></div>
   <p style="font-size:11px;color:var(--text2);margin:-4px 0 8px">2026: fixo (Principal já investido no Block Trade). Aportes futuros editáveis. Linha dourada = Aposentadoria 2046.</p>
   <div class="tw">
     <table style="min-width:760px">
@@ -473,7 +475,7 @@ hr.div{border:none;border-top:1px solid var(--bdr);margin:16px 0;}
 <!-- ═══ P5 DASHBOARD ═══ -->
 <section id="p5" class="pg">
 
-  <p class="sh">Parâmetros editáveis · todos os gráficos atualizam em tempo real</p>
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:4px;"><p class="sh" style="margin:0">Parâmetros editáveis · todos os gráficos atualizam em tempo real</p><button class="reset-btn" onclick="resetP5()">↺ Restaurar premissas originais</button></div>
   <div class="sg">
     <div class="sb">
       <p class="bt" style="color:var(--nv)">NTN-B</p>
@@ -569,7 +571,7 @@ hr.div{border:none;border-top:1px solid var(--bdr);margin:16px 0;}
 /* PASSWORD */
 function chk(){
   const v=document.getElementById('gate-in').value;
-  if(btoa(v)==='Q29yZGllckAyMDI2'){
+  if(btoa(v)==='THVjaWFuYTIwMjY='){
     document.getElementById('gate').style.display='none';
     document.getElementById('app').style.display='block';
     initP1();
@@ -914,7 +916,33 @@ function upd5(){
   if(C.im){C.im.data.datasets[0].data=imData;C.im.update('none');}
 }
 
-window.addEventListener('load',()=>{document.getElementById('gate-in').focus();});
+/* RESET FUNCTIONS */
+function resetP2(){
+  // Reset sliders
+  document.getElementById("sl-r3a").value=5.0;
+  document.getElementById("sl-r3b").value=4.0;
+  document.getElementById("sl-ap2").value=500;
+  document.getElementById("sl-ip2").value=6.15;
+  // Reset all bonuses
+  for(let i=0;i<=ANOS;i++){bonuses[i]=500;}
+  // Reset input fields in table
+  document.querySelectorAll(".api").forEach(el=>{
+    const idx=parseInt(el.dataset.idx);
+    if(!isNaN(idx)){el.value=500;bonuses[idx]=500;}
+  });
+  upd2();
+}
+function resetP5(){
+  document.getElementById("sl-ap").value=500;
+  document.getElementById("sl-r3a-d").value=5.0;
+  document.getElementById("sl-r3b-d").value=4.0;
+  document.getElementById("sl-ff").value=1.2;
+  document.getElementById("sl-rf").value=10.0;
+  document.getElementById("sl-im").value=7.0;
+  document.getElementById("sl-ip").value=6.15;
+  upd5();
+}
+window.addEventListener("load",()=>{document.getElementById("gate-in").focus();});
 </script>
 </body>
 </html>
