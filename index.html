@@ -8,15 +8,12 @@
 <meta name="robots" content="noindex, nofollow, noarchive, noimageindex, nosnippet">
 <meta name="googlebot" content="noindex, nofollow, noarchive">
 <meta name="referrer" content="no-referrer">
-<meta property="og:title" content="">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="none">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --nv:#1B3A6B;--nvl:#2B5A9B;
   --gd:#C9A84C;--gdl:#E8CC8A;
-  --gr:#1D9E75;--rd:#E24B4A;--bl:#185FA5;
+  --gr:#1D9E75;--rd:#E24B4A;--bl:#185FA5;--am:#F0AD20;
   --bg:#F5F7FA;--bg2:#FFFFFF;--bg3:#ECEEF3;
   --text:#1A1A2E;--text2:#556070;--text3:#9AA0AE;
   --bdr:rgba(0,0,0,0.09);--bdr2:rgba(0,0,0,0.16);
@@ -24,45 +21,123 @@
 }
 html{font-size:15px;}
 body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh;}
-
-/* GATE */
 #gate{position:fixed;inset:0;background:var(--nv);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:20px;}
 #gate-logo{color:var(--gd);font-size:12px;letter-spacing:2px;text-transform:uppercase;text-align:center;}
 #gate-logo strong{display:block;font-size:22px;color:white;letter-spacing:1px;margin-top:4px;}
 #gate-box{background:rgba(255,255,255,.07);border:0.5px solid rgba(201,168,76,.4);border-radius:var(--r);padding:32px;width:320px;text-align:center;}
 #gate-box p{color:rgba(255,255,255,.6);font-size:12px;margin-bottom:16px;letter-spacing:.5px;text-transform:uppercase;}
-#gate-in{width:100%;padding:11px 14px;border-radius:var(--rsm);border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:white;font-size:15px;text-align:center;letter-spacing:2px;outline:none;transition:border .2s;}
+#gate-in{width:100%;padding:11px 14px;border-radius:var(--rsm);border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:white;font-size:15px;text-align:center;letter-spacing:2px;outline:none;}
 #gate-in:focus{border-color:var(--gd);}
 #gate-btn{margin-top:12px;width:100%;padding:11px;background:var(--gd);border:none;border-radius:var(--rsm);color:var(--nv);font-weight:700;font-size:14px;cursor:pointer;}
 #gate-btn:hover{background:var(--gdl);}
 #gate-err{color:var(--rd);font-size:12px;margin-top:8px;min-height:16px;}
 #gate-sub{color:rgba(255,255,255,.3);font-size:11px;margin-top:12px;}
-
-/* APP */
 #app{display:none;max-width:1120px;margin:0 auto;padding:24px 18px 60px;}
-
-/* HEADER */
-.hdr{display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:14px;border-bottom:3px solid var(--nv);margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+.hdr{display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:14px;border-bottom:3px solid var(--nv);margin-bottom:14px;flex-wrap:wrap;gap:10px;}
 .hdr-l .ey{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gd);font-weight:700;margin-bottom:3px;}
 .hdr-l h1{font-size:26px;font-weight:700;color:var(--nv);}
 .hdr-l .sub{font-size:12px;color:var(--text2);margin-top:3px;}
 .conf{display:inline-block;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;background:rgba(226,75,74,.1);color:var(--rd);border:0.5px solid rgba(226,75,74,.3);border-radius:99px;padding:2px 8px;margin-top:4px;}
+.upd-stamp{display:inline-block;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:rgba(29,158,117,.12);color:var(--gr);border:0.5px solid rgba(29,158,117,.4);border-radius:99px;padding:2px 8px;margin-left:6px;vertical-align:middle;}
 .hdr-r{text-align:right;}
 .hdr-r .hl{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--text3);margin-bottom:2px;}
 .hdr-r .hv{font-size:14px;font-weight:700;color:var(--nv);}
 .hdr-r .hv span{color:var(--gd);}
 .hdr-r .hv2{font-size:11px;color:var(--text2);margin-top:2px;}
+.hdr-r .hv-usd{font-size:11px;color:var(--bl);font-weight:600;}
+
+/* TOOLTIP SYSTEM (works on hover desktop + tap mobile) */
+.tip{position:relative;border-bottom:1px dotted var(--text3);cursor:help;}
+.tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--nv);color:#fff;padding:8px 12px;border-radius:6px;font-size:11.5px;font-weight:400;line-height:1.45;width:280px;max-width:90vw;white-space:normal;letter-spacing:0;text-transform:none;text-align:left;opacity:0;pointer-events:none;transition:opacity .15s;z-index:1000;box-shadow:0 6px 20px rgba(0,0,0,.18);}
+.tip::before{content:'';position:absolute;bottom:calc(100% + 1px);left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--nv);opacity:0;pointer-events:none;transition:opacity .15s;z-index:1000;}
+.tip:hover::after,.tip:hover::before,.tip:focus::after,.tip:focus::before,.tip.show::after,.tip.show::before{opacity:1;}
+.tip.gd{border-bottom-color:var(--gd);}
+.tip.nv{border-bottom-color:var(--nv);}
+
+/* CARD HERÓI — DATA DE LIBERDADE FINANCEIRA */
+.hero{background:linear-gradient(135deg,#1B3A6B 0%,#2B5A9B 100%);border-radius:14px;padding:22px 26px;margin-bottom:14px;color:white;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(27,58,107,.25);}
+.hero::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:radial-gradient(circle,rgba(201,168,76,.20),transparent 65%);}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;margin-bottom:18px;position:relative;}
+.hero-top .he{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gdl);font-weight:700;margin-bottom:6px;}
+.hero-top h2{font-size:28px;font-weight:700;line-height:1.15;}
+.hero-top h2 .yr{color:var(--gd);font-size:42px;letter-spacing:-1px;}
+.hero-top h2 .age{font-size:14px;color:rgba(255,255,255,.65);font-weight:400;margin-left:6px;}
+.hero-top .hs-sub{font-size:13px;color:rgba(255,255,255,.78);margin-top:4px;line-height:1.45;}
+.hero-top .hs-sub strong{color:var(--gd);}
+.hero-meta{text-align:right;}
+.hero-meta .hml{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:3px;}
+.hero-meta .hmv{font-size:22px;font-weight:800;color:var(--gd);}
+.hero-meta .hms{font-size:11px;color:rgba(255,255,255,.7);margin-top:1px;}
+.hero-scen{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative;}
+@media(max-width:680px){.hero-scen{grid-template-columns:repeat(2,1fr);}}
+.hsc{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:11px 12px;text-align:center;backdrop-filter:blur(8px);}
+.hsc.active{background:rgba(201,168,76,.18);border-color:var(--gd);}
+.hsc.stress{background:rgba(226,75,74,.16);border-color:rgba(226,75,74,.5);}
+.hsc .hsl{font-size:9.5px;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:3px;font-weight:700;}
+.hsc .hsd{font-size:22px;font-weight:800;color:var(--gd);line-height:1;}
+.hsc.stress .hsd{color:#FFB4B3;}
+.hsc .hsa{font-size:11px;color:rgba(255,255,255,.85);margin-top:3px;}
+.hsc .hsn{font-size:9px;color:rgba(255,255,255,.55);margin-top:2px;letter-spacing:.4px;}
+.hero-foot{margin-top:12px;font-size:11px;color:rgba(255,255,255,.55);line-height:1.5;text-align:center;}
+.hero-foot .tip{color:rgba(255,255,255,.8);border-bottom-color:rgba(255,255,255,.4);}
+
+/* RESUMO EXECUTIVO */
+.exec{background:rgba(201,168,76,.07);border-left:4px solid var(--gd);border-radius:0 var(--rsm) var(--rsm) 0;padding:13px 18px;margin-bottom:14px;}
+.exec h3{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gd);font-weight:700;margin-bottom:6px;}
+.exec p{font-size:13.5px;line-height:1.6;color:var(--text);}
+.exec p strong{color:var(--nv);}
+.exec p em{color:var(--gd);font-style:normal;font-weight:700;}
+
+/* MACRO INDICATORS */
+.macro{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;background:rgba(27,58,107,.04);border:1px solid var(--bdr2);border-radius:var(--rsm);padding:8px 10px;margin-bottom:14px;}
+@media(max-width:600px){.macro{grid-template-columns:repeat(2,1fr);}}
+.mi-c{text-align:center;padding:3px 4px;border-right:1px solid var(--bdr);}
+.mi-c:last-child{border-right:none;}
+.mi-c .ml{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+.mi-c .mv{font-size:13px;font-weight:700;color:var(--nv);}
+.mi-c .ms{font-size:9px;color:var(--text2);}
+.mi-c .mok{color:var(--gr);}
+.mi-c .mwn{color:var(--am);}
+
+.perf{background:rgba(27,58,107,.04);border:1px solid var(--bdr2);border-left:4px solid var(--nv);border-radius:var(--rsm);padding:10px 13px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.perf-l{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--nv);margin-bottom:3px;}
+.perf-v{font-size:13px;color:var(--text);line-height:1.5;}
+.perf-v strong{color:var(--nv);}
+.perf-v .pct{font-weight:700;color:var(--gd);}
+.perf-r{font-size:11px;color:var(--text2);text-align:right;min-width:170px;}
+.perf-r .vr{font-size:18px;font-weight:700;color:var(--nv);}
+
+/* HEALTH SCORE — % parcela financiamento JP */
+.hs{background:linear-gradient(135deg,rgba(29,158,117,.08),rgba(240,173,32,.06));border:1.5px solid var(--gr);border-radius:var(--r);padding:14px 16px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+.hs-l{display:flex;align-items:center;gap:14px;flex:1;min-width:240px;}
+.hs-ring{width:64px;height:64px;border-radius:50%;background:conic-gradient(var(--gr) 0% 100%,#E8E8E8 100% 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;}
+.hs-ring::before{content:'';position:absolute;width:50px;height:50px;border-radius:50%;background:var(--bg);}
+.hs-ring .hsv{position:relative;font-size:13px;font-weight:800;color:var(--gr);z-index:1;}
+.hs-txt p{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;font-weight:700;margin-bottom:2px;}
+.hs-txt h3{font-size:15px;color:var(--nv);margin-bottom:2px;}
+.hs-txt span{font-size:11.5px;color:var(--text2);}
+.hs-tar{display:flex;gap:8px;font-size:10px;flex-wrap:wrap;}
+.hs-tar .ht{padding:5px 10px;border-radius:var(--rsm);background:var(--bg3);border:1px solid var(--bdr);min-width:90px;text-align:center;}
+.hs-tar .ht.cur{border-color:var(--gr);background:rgba(29,158,117,.12);}
+.hs-tar .ht b{display:block;font-size:13px;color:var(--nv);font-weight:700;}
+.hs-tar .ht p{font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;}
 
 /* NAV */
 .nav{display:flex;gap:5px;margin-bottom:22px;flex-wrap:wrap;}
 .nb{padding:8px 13px;font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;border:1px solid var(--bdr2);border-radius:var(--rsm);background:var(--bg2);color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap;}
 .nb:hover{border-color:var(--nv);color:var(--nv);}
 .nb.on{background:var(--nv);color:white;border-color:var(--nv);}
-
-/* PAGES */
 .pg{display:none;}.pg.on{display:block;}
 
-/* GRID */
+/* DECISÃO PENDENTE */
+.dec{background:linear-gradient(135deg,rgba(240,173,32,.10),rgba(240,173,32,.04));border:1.5px solid var(--am);border-left:5px solid var(--am);border-radius:var(--r);padding:12px 15px;margin-bottom:14px;}
+.dec-t{display:flex;align-items:center;gap:8px;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--am);margin-bottom:5px;}
+.dec-t::before{content:'⚡';font-size:14px;}
+.dec p{font-size:13px;line-height:1.55;color:var(--text);}
+.dec p strong{color:var(--nv);}
+.dec p em{color:var(--am);font-style:normal;font-weight:700;}
+
+/* GRIDS */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
 .g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
@@ -70,29 +145,46 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 @media(max-width:720px){.g2,.g3,.g4,.g5{grid-template-columns:1fr 1fr;}.g5{grid-template-columns:repeat(3,1fr);}}
 @media(max-width:480px){.g2,.g3,.g4,.g5{grid-template-columns:1fr;}}
 
-/* CARD */
 .card{background:var(--bg3);border-radius:var(--r);padding:12px 14px;border-top:3px solid transparent;}
 .card.nv{border-top-color:var(--nv);}.card.gd{border-top-color:var(--gd);}.card.gr{border-top-color:var(--gr);}
-.card.rd{border-top-color:var(--rd);}.card.bl{border-top-color:var(--bl);}
+.card.rd{border-top-color:var(--rd);}.card.bl{border-top-color:var(--bl);}.card.am{border-top-color:var(--am);}
 .card.onv{background:rgba(27,58,107,.05);border:1.5px solid var(--nv);}
 .card.ogd{background:rgba(201,168,76,.07);border:1.5px solid var(--gd);}
 .card.ogr{background:rgba(29,158,117,.06);border:1.5px solid var(--gr);}
 .card .cl{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:3px;}
 .card .cv{font-size:20px;font-weight:700;}
 .card .cs{font-size:11px;color:var(--text2);margin-top:2px;}
-.nvc{color:var(--nv);}.gdc{color:var(--gd);}.grc{color:var(--gr);}.rdc{color:var(--rd);}
+.nvc{color:var(--nv);}.gdc{color:var(--gd);}.grc{color:var(--gr);}.rdc{color:var(--rd);}.amc{color:var(--am);}
 
-/* NOMINAL HIGHLIGHT */
 .nom-box{background:rgba(201,168,76,.12);border:1.5px solid var(--gd);border-radius:var(--rsm);padding:8px 12px;text-align:center;margin-top:5px;}
 .nom-box .nl{font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:var(--gd);font-weight:700;margin-bottom:2px;}
 .nom-box .nv-val{font-size:18px;font-weight:800;color:var(--gd);}
 .nom-box .ns{font-size:10px;color:var(--text2);margin-top:1px;}
 
-/* SH */
 .sh{font-size:10px;font-weight:700;color:var(--text2);margin:18px 0 8px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--bdr);padding-bottom:5px;}
 .sh:first-child{margin-top:0;}
 
-/* NOTES */
+/* CENÁRIOS A vs B comparison */
+.scen-cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+@media(max-width:680px){.scen-cmp{grid-template-columns:1fr;}}
+.scen-box{border-radius:var(--r);padding:14px 16px;border:1.5px solid;}
+.scen-box.A{background:rgba(226,75,74,.06);border-color:rgba(226,75,74,.5);}
+.scen-box.B{background:rgba(29,158,117,.07);border-color:var(--gr);}
+.scen-box .sht{font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-bottom:5px;}
+.scen-box.A .sht{color:var(--rd);}
+.scen-box.B .sht{color:var(--gr);}
+.scen-box .sht2{font-size:14px;font-weight:700;color:var(--nv);margin-bottom:8px;}
+.scen-box .smr{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;}
+.scen-box .smr .smc{background:rgba(255,255,255,.5);border-radius:5px;padding:7px 9px;}
+.scen-box .smc .sml{font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);font-weight:700;}
+.scen-box .smc .smv{font-size:16px;font-weight:800;color:var(--nv);}
+.scen-box .smc .sms{font-size:10px;color:var(--text2);}
+.scen-diff{background:linear-gradient(135deg,rgba(201,168,76,.10),rgba(201,168,76,.04));border:1.5px solid var(--gd);border-radius:var(--r);padding:12px 15px;margin-bottom:14px;text-align:center;}
+.scen-diff .sdl{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gd);font-weight:700;margin-bottom:3px;}
+.scen-diff .sdv{font-size:24px;font-weight:800;color:var(--gd);}
+.scen-diff .sds{font-size:12px;color:var(--text);margin-top:3px;}
+
+/* NOTAS */
 .nt{border-left:3px solid var(--gd);padding:9px 13px;background:var(--bg3);border-radius:0 var(--rsm) var(--rsm) 0;margin:6px 0;font-size:12.5px;line-height:1.6;color:var(--text);}
 .nt .t{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--gd);display:block;margin-bottom:3px;}
 .nt.ok{border-left-color:var(--gr);}.nt.ok .t{color:var(--gr);}
@@ -100,8 +192,8 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .nt.rd{border-left-color:var(--rd);}.nt.rd .t{color:var(--rd);}
 .nt.bl{border-left-color:var(--bl);}.nt.bl .t{color:var(--bl);}
 .nt.gd{border-left-color:var(--gd);}
+.nt.am{border-left-color:var(--am);}.nt.am .t{color:var(--am);}
 
-/* TABLES */
 .tw{overflow-x:auto;margin-bottom:12px;}
 table{width:100%;border-collapse:collapse;font-size:12px;}
 th{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text2);padding:7px 8px;border-bottom:2px solid var(--bdr2);text-align:right;white-space:nowrap;}
@@ -118,45 +210,34 @@ tr.rs td{background:var(--bg3);font-size:10px;font-weight:700;text-transform:upp
 tr.rt td{background:var(--bg3);font-weight:700;border-top:2px solid var(--bdr2);border-bottom:none;}
 .gok{color:var(--gr);font-weight:700;}.gnd{color:var(--rd);}
 
-/* SLIDER */
-.sg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
-@media(max-width:600px){.sg{grid-template-columns:1fr;}}
+.sg{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:14px;}
 .sb{background:var(--bg3);border-radius:var(--r);padding:13px 15px;}
 .sb .bt{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:9px;}
 .sr{display:flex;align-items:center;gap:8px;margin:5px 0;}
-.sr label{font-size:11.5px;color:var(--text2);min-width:185px;flex-shrink:0;}
+.sr label{font-size:11.5px;color:var(--text2);min-width:240px;flex-shrink:0;}
 .sr input[type=range]{flex:1;accent-color:var(--nv);}
 .sr output{font-size:12.5px;font-weight:700;min-width:72px;text-align:right;}
 .lk{display:flex;align-items:center;gap:8px;margin:6px 0;background:rgba(201,168,76,.1);border-radius:var(--rsm);padding:8px 11px;border:1px solid rgba(201,168,76,.4);}
 .lk .ll{font-size:11.5px;color:var(--text2);flex:1;}
 .lk .lv{font-size:14px;font-weight:700;color:var(--gd);}
 
-/* CHART */
 .cw{position:relative;width:100%;}
-.h160{height:160px;}.h200{height:200px;}.h240{height:240px;}.h280{height:280px;}.h300{height:300px;}
-
-/* LEGEND */
+.h160{height:160px;}.h200{height:200px;}.h240{height:240px;}.h280{height:280px;}.h300{height:300px;}.h360{height:360px;}
 .leg{display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:var(--text2);margin:5px 0 12px;}
 .leg span{display:flex;align-items:center;gap:4px;}
 .ld{width:10px;height:10px;border-radius:2px;flex-shrink:0;display:inline-block;}
 .ldash{width:16px;height:2px;border-top:2px dashed var(--rd);display:inline-block;}
 
-/* PILLS */
 .pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:99px;margin:3px 3px 0 0;}
-.pn{background:#E6F1FB;color:var(--nv);}.pg_{background:#EAF3DE;color:#3B6D11;}.pa{background:#FAEEDA;color:#854F0B;}
+.pn{background:#E6F1FB;color:var(--nv);}.pg_{background:#EAF3DE;color:#3B6D11;}.pa{background:#FAEEDA;color:#854F0B;}.prd{background:#FBE6E6;color:var(--rd);}
 .isento{font-size:9px;background:#EAF3DE;color:#3B6D11;border:0.5px solid #97C459;border-radius:99px;padding:1px 5px;margin-left:3px;}
+.tributado{font-size:9px;background:#FBE6E6;color:var(--rd);border:0.5px solid rgba(226,75,74,.5);border-radius:99px;padding:1px 5px;margin-left:3px;}
 
-/* BLOCK TRADE */
 .bt-banner{background:rgba(27,58,107,.05);border:1.5px solid var(--nv);border-radius:var(--r);padding:15px 17px;margin-bottom:14px;}
 .bt-banner .bte{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--nv);margin-bottom:4px;}
 .bt-banner .btr{font-size:22px;font-weight:700;color:var(--text);}
 .bt-banner .bts{font-size:12px;color:var(--text2);margin-top:3px;}
 
-/* WL */
-.wlo{border:1px solid var(--bdr2);border-radius:var(--r);padding:14px;}
-.wlo.rec{border:1.5px solid var(--gr);}
-
-/* RENDA */
 .rc{background:rgba(29,158,117,.06);border:1.5px solid var(--gr);border-radius:var(--r);padding:14px 16px;margin-bottom:12px;}
 .rc-t{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--gr);margin-bottom:10px;}
 .rg4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
@@ -165,44 +246,44 @@ tr.rt td{background:var(--bg3);font-weight:700;border-top:2px solid var(--bdr2);
 .ri .rv{font-size:19px;font-weight:700;color:var(--gr);}
 .ri .rs{font-size:10px;color:var(--text2);}
 
-/* META */
 .mi{background:rgba(29,158,117,.07);border:1px solid var(--gr);border-radius:var(--rsm);padding:11px 15px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
 .mi-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--gr);margin-bottom:2px;}
 
-/* TIMELINE */
-.tl{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;padding:8px 0;}
-@media(max-width:700px){.tl{grid-template-columns:repeat(4,1fr);}}
-.tli{text-align:center;font-size:10px;}
-.tld{width:11px;height:11px;border-radius:50%;margin:0 auto 4px;}
-.tly{font-weight:700;margin-bottom:2px;}
-.tls{color:var(--text3);font-size:9px;line-height:1.3;}
-
-/* AP input */
 .api{width:70px;border:1px solid var(--bdr2);border-radius:4px;padding:3px 5px;font-size:12px;text-align:right;background:white;color:var(--text);}
 .api:focus{outline:none;border-color:var(--nv);}
 
-/* VERTEX TABLE */
-.vtx{border:0.5px solid var(--bdr2);border-radius:var(--r);padding:10px 13px;}
-.vtx-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bdr);font-size:12px;}
-.vtx-row:last-child{border-bottom:none;}
-.vtx-row.rec{background:rgba(29,158,117,.06);margin:0 -13px;padding:6px 13px;border-radius:var(--rsm);}
-.vtx-b{font-weight:700;color:var(--nv);}
 .badge{display:inline-block;font-size:9px;padding:1px 5px;border-radius:99px;border:0.5px solid var(--bdr2);color:var(--text2);margin-left:4px;}
 .badge.star{background:#FAEEDA;color:#854F0B;border-color:#E0B870;}
 .badge.rec{background:#EAF3DE;color:#3B6D11;border-color:#97C459;}
+.badge.warn{background:#FBE6E6;color:var(--rd);border-color:rgba(226,75,74,.5);}
 
-/* FOOTER */
 .footer{margin-top:30px;padding-top:12px;border-top:1px solid var(--bdr);font-size:10px;color:var(--text3);line-height:1.6;}
-
-/* DIVIDER */
 hr.div{border:none;border-top:1px solid var(--bdr);margin:16px 0;}
-.reset-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;font-size:11px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;border:1.5px solid var(--rd);border-radius:var(--rsm);background:transparent;color:var(--rd);cursor:pointer;transition:all .15s;margin-bottom:10px;}
+.reset-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;font-size:11px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;border:1.5px solid var(--rd);border-radius:var(--rsm);background:transparent;color:var(--rd);cursor:pointer;margin-bottom:10px;}
 .reset-btn:hover{background:var(--rd);color:white;}
+.fn{font-size:9.5px;color:var(--text3);margin:4px 0;line-height:1.5;font-style:italic;}
+
+/* AGENDA */
+.ag-mo{background:var(--bg3);border-radius:var(--r);padding:14px 16px;margin-bottom:12px;border-left:3px solid var(--nv);}
+.ag-mo h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--nv);margin-bottom:8px;}
+.ag-ev{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px dashed var(--bdr);font-size:12.5px;}
+.ag-ev:last-child{border-bottom:none;}
+.ag-ev .ae-l{flex:1;}
+.ag-ev .ae-d{font-size:10px;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+.ag-ev .ae-t{color:var(--text);font-weight:600;}
+.ag-ev .ae-s{font-size:11px;color:var(--text2);margin-top:1px;}
+.ag-ev .ae-v{font-size:13px;font-weight:700;text-align:right;min-width:110px;}
+.ag-ev.cr{background:rgba(29,158,117,.05);margin:0 -16px;padding:7px 16px;}
+.ag-ev.wn{background:rgba(240,173,32,.06);margin:0 -16px;padding:7px 16px;}
+.ag-ev.dt{background:rgba(226,75,74,.05);margin:0 -16px;padding:7px 16px;}
+
+.lmb{background:linear-gradient(135deg,rgba(24,95,165,.10),rgba(24,95,165,.04));border:1.5px dashed var(--bl);border-radius:var(--r);padding:13px 16px;margin-bottom:12px;}
+.lmb h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--bl);margin-bottom:6px;}
+.lmb p{font-size:12.5px;line-height:1.55;color:var(--text);}
+.lmb p strong{color:var(--bl);}
 </style>
 </head>
 <body>
-
-<!-- GATE -->
 <div id="gate">
   <div id="gate-logo">Cordier Investimentos · BTG Pactual<strong>Projeto Patrimonial</strong></div>
   <div id="gate-box">
@@ -213,158 +294,271 @@ hr.div{border:none;border-top:1px solid var(--bdr);margin:16px 0;}
   </div>
   <p id="gate-sub">Luciana Gil · Edson · Cordier Investimentos</p>
 </div>
-
-<!-- APP -->
 <div id="app">
-
-<!-- HEADER -->
 <header class="hdr">
   <div class="hdr-l">
     <p class="ey">Cordier Investimentos · BTG Pactual · Edson</p>
-    <h1>Luciana Gil</h1>
-    <p class="sub">45 anos · Pedro 8a · Joana 6a · mãe · Horizonte 20 anos · 2026 → 2046</p>
+    <h1>Luciana Gil <span class="upd-stamp">atualizado 13/05/2026</span></h1>
+    <p class="sub">45 anos · Pedro 8a · Joana 6a · mãe · revisão trimestral · próxima ago/2026 (a confirmar)</p>
     <span class="conf">confidencial · uso interno</span>
   </div>
   <div class="hdr-r">
-    <p class="hl">Carteira investida (BTG)</p>
-    <p class="hv"><span>R$ 7.131.402</span></p>
-    <p class="hl" style="margin-top:6px">+ Imóvel VNC (PL líquido)</p>
-    <p class="hv"><span>R$ 2.810.000</span></p>
-    <p class="hv2">Patrimônio total: <strong style="color:var(--nv)">R$ 9,94 MM</strong></p>
+    <p class="hl">Patrimônio Líquido <span class="tip" data-tip="Soma de tudo que está investido: carteira BTG, custódia internacional e reservas. Essa é a base que vai compor até a meta de R$ 20MM (em valor de hoje).">financeiro ⓘ</span></p>
+    <p class="hv"><span>R$ 7,12MM</span></p>
+    <p class="hv2" style="margin-top:1px">BTG R$ 6,74MM · Internacional R$ 384k</p>
+    <p class="hl" style="margin-top:6px">Patrimônio <span class="tip" data-tip="Imóveis (líquidos de financiamento). Sem data de venda definida — pode ficar imobilizado por anos. Não contam para a meta dos R$ 20MM, mas adicionam segurança e podem virar líquido se vendidos.">imobilizado ⓘ</span></p>
+    <p class="hv"><span>R$ 3,31MM</span></p>
+    <p class="hv2" style="margin-top:1px">Jardim Paulistano R$ 2,81MM · Santos R$ 500k</p>
+    <p class="hv2" style="margin-top:5px">Patrimônio total: <strong style="color:var(--nv)">R$ 10,43 MM</strong></p>
   </div>
 </header>
+
+<!-- CARD HERÓI · DATA DE LIBERDADE FINANCEIRA -->
+<div class="hero">
+  <div class="hero-top">
+    <div>
+      <p class="he">🎯 Data prevista de liberdade financeira</p>
+      <h2><span class="yr" id="hero-date">2033</span><span class="age" id="hero-age"> · 52 anos</span></h2>
+      <p class="hs-sub">Patrimônio líquido cruza <strong>R$ 20MM em valor de hoje</strong> · mantendo o ritmo atual de R$ 1,5MM/ano em aportes</p>
+    </div>
+    <div class="hero-meta">
+      <p class="hml">Equivalente nominal naquela data</p>
+      <p class="hmv" id="hero-nom">R$ 28,1 MM</p>
+      <p class="hms">em reais futuros · IPCA 6,15% a.a.</p>
+    </div>
+  </div>
+  <div class="hero-scen">
+    <div class="hsc">
+      <p class="hsl">Aporte R$ 1,0 MM/ano</p>
+      <p class="hsd" id="sc-low">2035</p>
+      <p class="hsa" id="sc-low-age">54 anos</p>
+      <p class="hsn">disciplina mais leve</p>
+    </div>
+    <div class="hsc active">
+      <p class="hsl">Aporte R$ 1,5 MM/ano ★</p>
+      <p class="hsd" id="sc-base">2033</p>
+      <p class="hsa" id="sc-base-age">52 anos</p>
+      <p class="hsn">cenário atual</p>
+    </div>
+    <div class="hsc">
+      <p class="hsl">Aporte R$ 2,0 MM/ano</p>
+      <p class="hsd" id="sc-high">2031</p>
+      <p class="hsa" id="sc-high-age">50 anos</p>
+      <p class="hsn">acelera a meta em 2a</p>
+    </div>
+    <div class="hsc stress">
+      <p class="hsl">Parar de aportar hoje</p>
+      <p class="hsd" id="sc-zero">após 2046</p>
+      <p class="hsa" id="sc-zero-age">não atinge no horizonte</p>
+      <p class="hsn">stress test</p>
+    </div>
+  </div>
+  <p class="hero-foot">
+    Cálculo: NTN-B Principal compõe a IPCA+6,44% · free float dos aportes compõe a <span class="tip" data-tip="3,5% real = 10% nominal (premissa conservadora dos fundos isentos cetipados, FIIs e crédito de qualidade) menos IPCA 6,15%. Equivale ao que projetos similares entregam liquidamente.">3,5% real (10% nominal isento)</span> · carteira de renda atual mantém poder de compra (DY paga SAC) · imóveis NÃO entram na meta.
+  </p>
+</div>
+
+<!-- RESUMO EXECUTIVO -->
+<div class="exec">
+  <h3>📌 Resumo em 30 segundos</h3>
+  <p>
+    Sua carteira hoje paga <strong>R$ 43,9k/mês</strong> em dividendos isentos de IR · em julho/2026 sobe para <strong>R$ 52,4k/mês</strong> quando todos os fundos novos começarem a pagar o cupom cheio · cobre com folga (<em>148%</em>) a parcela do financiamento do Jardim Paulistano. Mantendo o ritmo de <strong>R$ 1,5MM/ano</strong> em aportes do bônus, você atinge <em>independência financeira em ~2033 (52 anos)</em> — 13 anos antes da meta original de 65. A âncora é a NTN-B Principal travada em IPCA+6,44% até 2050.
+  </p>
+</div>
+
+<!-- MACRO INDICATORS -->
+<div class="macro">
+  <div class="mi-c"><p class="ml"><span class="tip" data-tip="Inflação medida pelo IBGE nos últimos 12 meses. Quanto menor, melhor para nossa premissa de longo prazo (usamos 6,15% como base conservadora).">IPCA 12m ⓘ</span></p><p class="mv">5,82%</p><p class="ms mok">↓ premissa 6,15%</p></div>
+  <div class="mi-c"><p class="ml"><span class="tip" data-tip="Taxa básica de juros decidida pelo Banco Central. Define a remuneração dos investimentos pós-fixados e o CDI.">Selic ⓘ</span></p><p class="mv">13,75%</p><p class="ms">Copom estável</p></div>
+  <div class="mi-c"><p class="ml"><span class="tip" data-tip="Taxa real (acima da inflação) que o título do Tesouro com vencimento em 2050 paga hoje no mercado. Travamos 6,44% — está ligeiramente melhor que o mercado atual.">NTN-B 2050 hoje ⓘ</span></p><p class="mv">6,38%</p><p class="ms mok">✓ travado 6,44%</p></div>
+  <div class="mi-c"><p class="ml">USD/BRL</p><p class="mv">5,06</p><p class="ms">estável no mês</p></div>
+  <div class="mi-c"><p class="ml">Ibovespa YTD</p><p class="mv">+2,78%</p><p class="ms">acima do CDI parcial</p></div>
+</div>
+
+<!-- PERFORMANCE BANNER -->
+<div class="perf">
+  <div style="flex:1;min-width:260px">
+    <p class="perf-l">Performance YTD 2026 · 01/01 → 13/05</p>
+    <p class="perf-v">Carteira <strong>+3,73%</strong> · CDI 4,99% · <span class="pct">84,59% do CDI</span> · <span class="tip" data-tip="Período de migração estrutural: legados de baixo rendimento (COE, IRFM11, CRI OPEA) sendo liquidados e substituídos por cetipados isentos de IR em carência D+30/60. Performance recupera 100%+ do CDI a partir de jul/26.">período de transição estrutural ⓘ</span></p>
+  </div>
+  <div class="perf-r">
+    <p class="vr">R$ 206.623</p>
+    <p>rendimento acumulado no ano</p>
+  </div>
+</div>
+
+<!-- HEALTH SCORE — % parcela JP -->
+<div class="hs">
+  <div class="hs-l">
+    <div class="hs-ring"><span class="hsv">124%</span></div>
+    <div class="hs-txt">
+      <p>Cobertura da <span class="tip" data-tip="Parcela mensal do financiamento SAC do apartamento do Jardim Paulistano. R$ 35,4k em abr/2026, decrescente até zerar em fev/2044 (214 parcelas restantes).">parcela do financiamento JP ⓘ</span></p>
+      <h3>🟢 Saudável · 124% hoje</h3>
+      <span>DY recebido R$ 43,9k ÷ Parcela R$ 35,4k = folga de R$ 8,5k/mês · não inclui custo de vida pessoal</span>
+    </div>
+  </div>
+  <div class="hs-tar">
+    <div class="ht cur"><b>124%</b><p>Hoje 🟢</p></div>
+    <div class="ht"><b>148%</b><p>Jul/26 🟢</p></div>
+    <div class="ht"><b>160%</b><p>Pós-COE Out/27 🟢</p></div>
+    <div class="ht"><b>∞</b><p>Pós-SAC 2044 🟢</p></div>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav class="nav">
   <button class="nb on" id="b1" onclick="sp(1)">01 · Project Finance</button>
   <button class="nb" id="b2" onclick="sp(2)">02 · Aposentadoria NTN-B</button>
-  <button class="nb" id="b3" onclick="sp(3)">03 · Alocação Bônus 2026</button>
-  <button class="nb" id="b4" onclick="sp(4)">04 · Seguros Prudential</button>
-  <button class="nb" id="b5" onclick="sp(5)">05 · Dashboard Consolidado</button>
+  <button class="nb" id="b3" onclick="sp(3)">03 · Plano vs Execução · Bônus 2026</button>
+  <button class="nb" id="b4" onclick="sp(4)">04 · Dashboard &amp; Trajetória</button>
+  <button class="nb" id="b5" onclick="sp(5)">05 · Agenda &amp; Marcos</button>
 </nav>
 
 <!-- ═══ P1 PROJECT FINANCE ═══ -->
 <section id="p1" class="pg on">
-  <div class="g4" style="margin-bottom:14px">
-    <div class="card nv"><p class="cl">Portfólio investido (BTG)</p><p class="cv nvc">R$ 7.131.402</p><p class="cs">FIIs + Crédito Bancário · 100% isento IR</p></div>
-    <div class="card gr"><p class="cl">DY mensal estimado</p><p class="cv grc">R$ 46,0k</p><p class="cs">todos os ativos isentos de IR</p></div>
-    <div class="card rd"><p class="cl">Parcela SAC SP (abr/26)</p><p class="cv rdc">R$ 35,4k</p><p class="cs">214 restantes · até fev/2044</p></div>
-    <div class="card gr"><p class="cl">Folga mensal</p><p class="cv grc">+R$ 10,6k</p><p class="cs">DY − parcela · cresce a cada ano</p></div>
+  <div class="dec">
+    <p class="dec-t">Decisões para a próxima reunião</p>
+    <p>
+      <em>1.</em> <strong>Realocar DEBB11 → BCDI11</strong> · saldo R$ 151,7k com lucro latente +R$ 11.836 (+8,46%) · a curva de juros mudou, BCDI11 (119% CDI isento) supera o ETF tributado · impacto <strong>+R$ 1,2k/mês de DY</strong>.<br>
+      <em>2.</em> <strong>Alocar residual R$ 79,7k</strong> · sugestão BCDI11 ou ROPP11 · impacto <strong>+R$ 1k/mês de DY</strong>.
+    </p>
   </div>
 
-  <p class="sh">Composição detalhada · extrato BTG Pactual · abr/2026</p>
+  <div class="g4" style="margin-bottom:14px">
+    <div class="card nv"><p class="cl">Carteira investida BTG</p><p class="cv nvc">R$ 6,74MM</p><p class="cs"><span class="tip" data-tip="Soma de todos os investimentos no BTG: FIIs cetipados, crédito bancário (LCA/CDCA), NTN-B Tesouro, COE legado, ETF e fundos pós-fixados de reserva.">FIIs + Crédito + NTN-B + COE + DEBB11 ⓘ</span></p></div>
+    <div class="card gr"><p class="cl">DY mensal projetado</p><p class="cv grc">R$ 56,7k</p><p class="cs">após ramp-up + BTGL11 (out/26)</p></div>
+    <div class="card gd"><p class="cl">DY efetivo mar-abr/2026</p><p class="cv gdc">R$ 43,9k/mês</p><p class="cs">média recebida nos últimos 2 meses</p></div>
+    <div class="card rd"><p class="cl"><span class="tip" data-tip="Sistema de Amortização Constante. As parcelas começam mais altas e vão diminuindo ao longo do tempo. Restam 214 parcelas até fev/2044.">Parcela SAC JP (abr/26) ⓘ</span></p><p class="cv rdc">R$ 35,4k</p><p class="cs">214 restantes · até fev/2044</p></div>
+  </div>
+
+  <p class="sh">Composição detalhada · relatório oficial BTG · 13/05/2026</p>
+  <p class="fn">Passe o mouse sobre o nome de cada ativo para ver explicação curta e rentabilidade 12m incluindo dividendos.</p>
   <div class="tw">
     <table>
       <thead><tr><th>Ativo</th><th style="text-align:left">Classe</th><th>Vencimento</th><th>Taxa / Perf.</th><th>DY mensal</th><th>Saldo bruto</th></tr></thead>
       <tbody>
-        <tr class="rs"><td colspan="6">Fundos de Investimento Imobiliário</td></tr>
-        <tr><td><strong style="color:var(--nv)">BTG Pactual LogCP FII · BTLC11</strong></td><td>FII · Logística <span class="isento">isento IR</span></td><td>—</td><td>10,67% · 12m</td><td class="grc">R$ 25.063</td><td>R$ 2.847.436</td></tr>
-        <tr><td><strong style="color:var(--nv)">RBR Oportunidades FII · ROPP11</strong></td><td>FII · Alternativos <span class="isento">isento IR</span></td><td>—</td><td>15,76% · 12m</td><td class="grc">R$ 7.345</td><td>R$ 697.334</td></tr>
-        <tr><td><strong style="color:var(--nv)">BTG Prime Hosp FII A</strong></td><td>FII · Hotelaria <span class="isento">isento IR</span></td><td>—</td><td>IPCA+8,40% · cota+caixa</td><td class="grc">R$ 1.750 ¹</td><td>R$ 250.000</td></tr>
-        <tr><td><strong style="color:var(--nv)">BTAG II CDI Agro DC</strong></td><td>FIDC · Agro <span class="isento">isento IR</span></td><td>—</td><td>11,13% · 12m</td><td class="grc">R$ 2.500</td><td>R$ 32.338</td></tr>
-        <tr><td><strong style="color:var(--nv)">BTAG II PRE Fiagro DC</strong></td><td>FIAGRO <span class="isento">isento IR</span></td><td>—</td><td>14,75% · 12m</td><td class="grc">R$ 413</td><td>R$ 203.011</td></tr>
-        <tr class="rs"><td colspan="6">Crédito Bancário</td></tr>
-        <tr><td><strong style="color:var(--nv)">LCA BTG Pactual</strong></td><td>LCA · Pós-fixado <span class="isento">isento IR</span></td><td>08/04/2027</td><td>90% CDI</td><td class="grc">R$ 8.377</td><td>R$ 802.347</td></tr>
-        <tr><td><strong style="color:var(--nv)">CDCA BTG Pactual Commodities</strong></td><td>CDCA · Agro <span class="isento">isento IR</span></td><td>17/07/2034</td><td>12,04% a.a.</td><td class="grc">R$ 505</td><td>R$ 62.534</td></tr>
-        <tr class="rt"><td colspan="4"><strong>Total Project Finance</strong></td><td class="grc"><strong>R$ 45.953</strong></td><td><strong>R$ 4.895.000</strong></td></tr>
+        <tr class="rs"><td colspan="6">Fundos cetipados Alternativos · isentos de IR · base de renda passiva</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="BTLC11 · Fundo Imobiliário de galpões logísticos do BTG. Carteira de imóveis alugados para grandes operadores. Paga dividendo mensal isento de IR. Rentabilidade 12m: +10,30% (incluindo dividendos).">BTG Pactual LogCP FII · BTLC11 ⓘ</strong></td><td>FII · Logística <span class="isento">isento IR</span></td><td>—</td><td>YTD +2,81% · 12m +10,30%</td><td class="grc">R$ 25.063</td><td>R$ 2.842.962</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="BTGL11 · FII de logística novo, em processo de liquidação de portfólio. Projeta 9,15% a.a. distribuído mensalmente + possível ganho de capital. Pagamento cheio a partir de out/26.">BTG Pactual Logística · BTGL11 ⓘ</strong> <span class="badge rec">9,15% projetado</span></td><td>FII · Logística <span class="isento">isento IR</span></td><td>—</td><td>9,15% a.a. + ganho capital</td><td class="grc">R$ 266</td><td>R$ 34.956</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="ROPP11 · FII de oportunidades alternativas da RBR. Carteira diversificada em ativos imobiliários especiais. Rentabilidade 12m: +15,59% — destaque da carteira.">RBR Oportunidades FII · ROPP11 ⓘ</strong></td><td>FII · Alternativos <span class="isento">isento IR</span></td><td>—</td><td>YTD +5,11% · 12m +15,59%</td><td class="grc">R$ 7.050</td><td>R$ 769.623</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="BTHP11 · FII de hotelaria premium. Indexado IPCA+9,00% — protege contra inflação. Adquirido abr/26, carência D+60 até jul/26 quando começa a pagar caixa integral.">BTG Prime Hosp FII · BTHP11 ⓘ</strong> <span class="badge star">novo abr/26</span></td><td>FII · Hotelaria <span class="isento">isento IR</span></td><td>—</td><td>IPCA+9,00% · cota+caixa</td><td class="grc">R$ 3.198</td><td>R$ 254.449</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="BTAG II PRE · Fiagro do BTG indexado pré-fixado, focado em crédito do agronegócio. Isento de IR. Rentabilidade YTD +5,08%.">BTAG II PRE Fiagro DC ⓘ</strong> <span class="badge star">novo abr/26</span></td><td>FIAGRO <span class="isento">isento IR</span></td><td>—</td><td>YTD +5,08%</td><td class="grc">R$ 3.128</td><td>R$ 227.393</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="BTIR11 · FII de incorporação imobiliária do BTG. Participa de desenvolvimento de empreendimentos. Adquirido abr/26 em carência. Rentabilidade YTD +0,36%.">BTG Incorporação FII · BTIR11 ⓘ</strong> <span class="badge star">novo abr/26</span></td><td>FII · Alternativos <span class="isento">isento IR</span></td><td>—</td><td>YTD +0,36%</td><td class="grc">R$ 970</td><td>R$ 100.583</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="RBR Infra Crédito Pré · FIP que financia projetos de infraestrutura com taxa pré-fixada. Isento de IR. MTM levemente negativo no curtíssimo prazo é típico nas primeiras semanas pós-aquisição.">RBR Infra Crédito Pré FIP ⓘ</strong> <span class="badge star">novo abr/26</span></td><td>FIP Infra · Pré <span class="isento">isento IR</span></td><td>—</td><td>YTD -0,29%</td><td class="grc">R$ 922</td><td>R$ 91.981</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="BTID11 · FIP de Debêntures de Infraestrutura do BTG. Isento de IR. Adquirido abr/26.">BTG Pactual Infra Debt FIP · BTID11 ⓘ</strong> <span class="badge star">novo abr/26</span></td><td>FIP · Renda Fixa <span class="isento">isento IR</span></td><td>—</td><td>YTD -0,21%</td><td class="grc">R$ 734</td><td>R$ 70.445</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="FIDC de recebíveis agro do BTG, indexado ao CDI. Isento de IR. YTD entrega 114% do CDI.">BTAG II CDI Agro DC ⓘ</strong></td><td>FIDC · Agro <span class="isento">isento IR</span></td><td>—</td><td>YTD +5,22% · 114% CDI</td><td class="grc">R$ 413</td><td>R$ 32.322</td></tr>
+
+        <tr class="rs"><td colspan="6">Fundos cetipados Pós-fixado · isentos</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="BCDI11 · FII de dívida de infraestrutura indexado ao CDI. Entrega 119% do CDI isento de IR. Candidato ideal para receber a realocação do DEBB11.">BTG Dívida Infra CDI · BCDI11 ⓘ</strong> <span class="badge star">novo abr/26</span></td><td>FI Infra · CDI+ <span class="isento">isento IR</span></td><td>—</td><td>119% CDI</td><td class="grc">R$ 1.448</td><td>R$ 98.950</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="BTDI11 · FII de Crédito Imobiliário indexado ao CDI. Distribuição mensal isenta. YTD entregando 164% do CDI.">BTGP Crédito Imobiliário CDI · BTDI11 ⓘ</strong> <span class="badge star">novo abr/26</span></td><td>FII · Imobiliário <span class="isento">isento IR</span></td><td>—</td><td>YTD 164% CDI</td><td class="grc">R$ 346</td><td>R$ 29.465</td></tr>
+
+        <tr class="rs"><td colspan="6">Crédito Bancário direto · isentos</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="Letra de Crédito do Agronegócio. Título emitido pelo banco lastreado em operações do agro. Isento de IR. Paga 90% do CDI — vence abr/2027.">LCA BTG Pactual ⓘ</strong></td><td>LCA · Pós-fixado <span class="isento">isento IR</span></td><td>08/04/2027</td><td>90% CDI · YTD 106% CDI</td><td class="grc">R$ 8.306</td><td>R$ 801.924</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="Certificado de Direitos Creditórios do Agronegócio. Título lastreado em operações de commodities. Taxa pré-fixada 12,04% a.a., isento de IR, vence jul/2034.">CDCA BTG Pactual Commodities ⓘ</strong></td><td>CDCA · Agro <span class="isento">isento IR</span></td><td>17/07/2034</td><td>12,04% a.a.</td><td class="grc">R$ 548</td><td>R$ 62.505</td></tr>
+
+        <tr class="rs"><td colspan="6">NTN-B Tesouro · âncora de aposentadoria</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="Tesouro IPCA+ Principal 2050. Não paga cupons periódicos — todo o juro acumula até o vencimento. Taxa contratada: IPCA + 6,44% a.a. — protege contra inflação por 24 anos. Liquidado abr/26, MTM +0,87% nos primeiros 26 dias.">NTN-B Principal 2050 ⓘ</strong> <span class="badge star">novo abr/26</span></td><td>Tesouro · Inflação</td><td>15/08/2050</td><td>IPCA+6,44% · MTM +0,87%</td><td class="grc">— bullet</td><td>R$ 478.809</td></tr>
+
+        <tr class="rs"><td colspan="6">Ativos legados (não compõem o projeto · monitoramento)</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="Certificado de Operações Estruturadas do Credit Suisse. Produto travado até o vencimento (out/2027). Rentabilidade pífia: 40% do CDI YTD. Será realocado imediatamente ao vencer.">COE Credit Suisse ⓘ</strong> <span class="tributado">tributado IR</span> <span class="badge warn">performance pífia</span></td><td>COE · 100% PRE</td><td>22/10/2027</td><td>+29,5% acum (4a) · 40% CDI</td><td class="grc">— sem cupom</td><td>R$ 194.220</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="ETF de Debêntures Incentivadas. Tributado em 15% IR no resgate. Tem lucro latente de +8,46%. Recomendamos realocar para BCDI11 (119% CDI isento) — a curva de juros mudou desde a compra.">DEBB11 ⓘ</strong> <span class="badge rec">★ realocar</span></td><td>ETF Debêntures Inc.</td><td>—</td><td>YTD +4,50% · 12m incluindo cupons +9,2%</td><td class="grc">— a migrar</td><td>R$ 151.683</td></tr>
+
+        <tr class="rt"><td colspan="4"><strong>Total Carteira BTG (excl. reserva)</strong></td><td class="grc"><strong>R$ 52.410</strong></td><td><strong>R$ 6.687.041</strong></td></tr>
       </tbody>
     </table>
   </div>
-  <p style="font-size:10px;color:var(--text2);margin:-6px 0 12px">¹ BTG Prime Hosp IPCA+8,40%: porção IPCA acruada na cota mensalmente · caixa distribuído = R$250k × 8,40%/12 = R$1.750/mês · isento IR</p>
 
-  <p class="sh">Imóvel · Vila Nova Conceição · São Paulo</p>
-  <div class="g4" style="margin-bottom:12px">
-    <div class="card"><p class="cl">Avaliação fev/2024</p><p class="cv">R$ 3,84 MM</p><p class="cs">Laudo oficial</p></div>
-    <div class="card gd"><p class="cl">Valor de mercado hoje</p><p class="cv gdc">R$ 5,25 MM</p><p class="cs">Estimativa abr/2026</p></div>
-    <div class="card rd"><p class="cl">Saldo devedor SAC</p><p class="cv rdc">R$ 2,44 MM</p><p class="cs">quita fev/2044 · 214 parcelas</p></div>
-    <div class="card gr"><p class="cl">Patrimônio líquido</p><p class="cv grc">R$ 2,81 MM</p><p class="cs">mercado − saldo SAC</p></div>
+  <p class="sh">Histórico mensal de dividendos recebidos · R$ k</p>
+  <div class="cw h200" style="margin-bottom:8px"><canvas id="divChart" role="img" aria-label="Histórico de dividendos mensais"></canvas></div>
+  <p class="fn" style="text-align:center">Mar-Abr/26: efetivo recebido · Mai-Ago/26: projeção com ramp-up · Set-Dez/26: estabilizado · Linha-alvo R$ 56,4k</p>
+
+  <p class="sh">Reserva de liquidez · D+0 a D+1</p>
+  <div class="g4" style="margin-bottom:14px">
+    <div class="card"><p class="cl"><span class="tip" data-tip="Fundo de renda fixa crédito privado do Bradesco com liquidez no mesmo dia (D+0). Entrega 100,77% do CDI. Tributado em 22,5% IR (curto prazo).">Bradesco Bancos II FIC RF CrPr ⓘ</span></p><p class="cv">R$ 279.487</p><p class="cs">D+0 · pós-fixado · 100,77% CDI</p></div>
+    <div class="card"><p class="cl"><span class="tip" data-tip="Fundo de Renda Fixa Referenciado DI da Riza Lotus com liquidez D+1. Entrega 99,95% do CDI. Para reserva de curtíssimo prazo.">Riza Lotus FIRF Ref DI CrPr ⓘ</span></p><p class="cv">R$ 200.241</p><p class="cs">D+1 · pós-fixado · 99,95% CDI</p></div>
+    <div class="card ogr"><p class="cl grc">Reserva da cliente</p><p class="cv grc">R$ 400.000</p><p class="cs">~11 meses de SAC JP</p></div>
+    <div class="card am"><p class="cl amc">Residual a realocar</p><p class="cv amc">R$ 79.728</p><p class="cs">curto prazo · BCDI11/ROPP11</p></div>
   </div>
 
-  <p class="sh">Parcelas SAC SP · 214 restantes — passe o mouse para ver o valor médio do ano</p>
-  <div class="g2" style="align-items:start">
-    <div class="cw h200"><canvas id="sacChart" role="img" aria-label="Parcelas SAC vs DY mensal"></canvas></div>
-    <div class="g3" style="align-content:start">
-      <div class="card"><p class="cl">Parcelas restantes</p><p class="cv">214</p><p class="cs">abr/2026 → fev/2044</p></div>
-      <div class="card"><p class="cl">Parcela 2041 (60a)</p><p class="cv">~R$16,5k</p><p class="cs">34 restantes</p></div>
-      <div class="card gr"><p class="cl">Folga 2041</p><p class="cv grc">+R$29,5k</p><p class="cs">DY R$46k − parc. R$16,5k</p></div>
-    </div>
+  <p class="sh">Custódia internacional · BTG Wealth offshore · educação Pedro &amp; Joana</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Ativo</th><th style="text-align:left">Classe</th><th>Vencimento</th><th>Cost basis</th><th>Mark-to-market</th><th>Saldo USD</th></tr></thead>
+      <tbody>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="Título do Tesouro Americano de longo prazo (Treasury Bond). Paga cupom semestral de 4,5% em dólar até fev/2036. Casa com Joana 20 anos.">US Treasury Bonds 4,5% ⓘ</strong></td><td>Treasury Bond</td><td>15/02/2036</td><td>US$ 1.036,30</td><td class="rdc">-2,72%</td><td>US$ 21.171,57</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="Treasury Note de prazo médio. Paga 3,875% em dólar semestralmente. Vence em 2034 — casa com Pedro 18 anos.">US Treasury Notes 3,875% ⓘ</strong></td><td>Treasury Note</td><td>15/08/2034</td><td>US$ 990,60</td><td class="rdc">-2,62%</td><td>US$ 21.222,26</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="Treasury Note de prazo médio. Paga 4,25% em dólar. Vence 2035 — entre os 18 anos do Pedro e da Joana.">US Treasury Notes 4,25% ⓘ</strong></td><td>Treasury Note</td><td>15/08/2035</td><td>US$ 1.012,00</td><td class="rdc">-2,68%</td><td>US$ 21.666,04</td></tr>
+        <tr><td><strong style="color:var(--nv)" class="tip" data-tip="Fundo de Money Market em dólar da Invesco. Liquidez imediata, rende juros americanos. Funciona como caixa para giro.">Invesco US Dollar Liquidity ⓘ</strong></td><td>Money Market Fund</td><td>—</td><td>US$ 1.157,57</td><td class="rdc">-0,01%</td><td>US$ 11.811,51</td></tr>
+        <tr class="rt"><td colspan="4"><strong>Total internacional</strong></td><td class="rdc"><strong>-2,27% MTM</strong></td><td><strong>US$ 75.871,38</strong></td></tr>
+      </tbody>
+    </table>
   </div>
-  <div class="leg"><span><span class="ld" style="background:var(--nv)"></span>Parcela SAC SP</span><span><span class="ld" style="background:var(--gd)"></span>DY mensal (~R$46k)</span><span><span class="ld" style="background:rgba(29,158,117,.3)"></span>Folga crescente</span></div>
+  <div class="nt bl"><span class="t">MTM treasuries negativo é ruído de curto prazo · irrelevante para o projeto</span>
+    Cost basis US$ 77.586 · valor atual US$ 75.871 · perda <span class="tip" data-tip="Marcação a mercado: é o preço que o título vale HOJE se vendido. Como vamos carregar até o vencimento (2034/2035/2036), esse número é ruído — receberemos a taxa contratada independente.">MTM</span> <strong>-US$ 1.715 (-2,27%)</strong>. A estratégia é <strong>carry-to-maturity</strong>: T-Note 2034 casa com Pedro 18a, T-Bond 2036 casa com Joana 18a. Cupons semestrais em dólar fortalecem o caixa de educação internacional.
+  </div>
 
-  <p class="sh">Observações</p>
-  <div class="nt bl"><span class="t">BTLC11 — redução planejada de dividendo</span>Após 2 anos de portfólio, o dividendo migrou de 14% para 10,6% a.a. (R$37.515→R$25.062/mês). Movimento acordado e incorporado ao modelo.</div>
-  <div class="nt ok"><span class="t">Apto Santos — SAC quitado integralmente mai/2025</span>O financiamento SAC do apartamento Santos foi quitado em maio/2025. O financiamento PRICE foi apenas uma cotação e não foi contratado. Apenas o SAC do imóvel de São Paulo permanece ativo.</div>
-  <div class="nt"><span class="t">LCA BTG — vence abr/2027 · planejar reinvestimento</span>Contribui com R$8.377/mês. Ao vencer, reinvestir em FIIs cetipados de qualidade ou crédito privado IPCA+ para manter o patamar de DY.</div>
+  <p class="sh">Imóveis · patrimônio imobilizado</p>
+  <div class="g3" style="margin-bottom:8px">
+    <div class="card"><p class="cl">Jardim Paulistano · valor mercado</p><p class="cv">R$ 5,25 MM</p><p class="cs">faixa 5,0 a 5,5MM · valorização 6%/ano</p></div>
+    <div class="card rd"><p class="cl">Jardim Paulistano · saldo SAC</p><p class="cv rdc">R$ 2,44 MM</p><p class="cs">214 parcelas · quita fev/2044</p></div>
+    <div class="card gr"><p class="cl">Jardim Paulistano · líquido hoje</p><p class="cv grc">R$ 2,81 MM</p><p class="cs">mercado − saldo SAC · sobe a cada parcela</p></div>
+  </div>
+  <div class="g3" style="margin-bottom:8px">
+    <div class="card"><p class="cl">Apto Santos · valor total</p><p class="cv">R$ 1,00 MM</p><p class="cs">quitado em mai/2025 · sem dívida</p></div>
+    <div class="card"><p class="cl">Apto Santos · parte dela (50%)</p><p class="cv">R$ 500 k</p><p class="cs">50% irmã · mãe mora no apartamento</p></div>
+    <div class="card gr"><p class="cl">Imobilizado total</p><p class="cv grc">R$ 3,31 MM</p><p class="cs">JP líquido + Santos parte dela</p></div>
+  </div>
+  <p class="fn" style="margin-top:6px">O imobilizado <strong>não conta</strong> para a meta dos R$ 20MM líquidos. Caso a Luciana decida vender no futuro, esse valor migra para o patrimônio líquido e antecipa significativamente a data de liberdade financeira.</p>
+
+  <p class="sh">Observações estratégicas</p>
+  <div class="nt am"><span class="t">😩 COE Credit Suisse · o ativo herdado que vence em out/2027</span>
+    Aplicado em 18/04/2022 (R$ 150k cost basis), saldo atual R$ 194.220 (~6,7% a.a. · <strong>40,64% do CDI YTD</strong>). <strong>Sem opção de resgate antecipado</strong>. Vence em 22/10/2027 e vamos realocar imediatamente em FIIs/FIPs isentos. Estimativa de liberação: R$ 200k+ para reinvestimento.
+  </div>
+  <div class="nt nv"><span class="t">NTN-B Principal · marcação a mercado favorável no primeiro mês</span>Em 26 dias, o saldo bruto passou de R$ 474.655 para R$ 478.809 — <strong>MTM positivo de +R$ 4.154 (+0,87%)</strong>. Para o projeto, esse MTM é irrelevante — o que importa é a taxa contratada de 6,44% que compõe até 2050.</div>
+  <div class="nt bl"><span class="t">BTLC11 — redução planejada de dividendo</span>Após 2 anos de portfólio, o dividendo migrou de 14% para ~10,57% a.a. (R$37,5k → R$25,1k/mês). Movimento acordado e incorporado ao modelo · YTD +2,81% · 12m +10,30%.</div>
+  <div class="nt"><span class="t">LCA BTG — vence abr/2027 · planejar reinvestimento</span>Contribui com R$ 8.306/mês. Ao vencer, reinvestir em FII cetipado de qualidade ou crédito privado IPCA+ para manter o patamar de DY.</div>
 </section>
 
-<!-- ═══ P2 APOSENTADORIA ═══ -->
+<!-- ═══ P2 APOSENTADORIA NTN-B ═══ -->
 <section id="p2" class="pg">
-
-  <!-- Block Trade sem ROA/spread -->
   <div class="bt-banner">
-    <p class="bte">Block Trade · NTN-B Principal · Liquidação 17/04/2026 · Ordens até 15/04 às 17h</p>
-    <p class="btr">IPCA + 7,10% até 7,25% · Bullet · Sem cupons semestrais</p>
-    <p class="bts">Vértices disponíveis: B2033 · B2037 · B2050 · B2060 · Mínimo de aquisição: 1 PU</p>
-    <div style="margin-top:8px"><span class="pill pn">Zero drag de IR</span><span class="pill pg_">Máxima convexidade</span><span class="pill pa">Acesso exclusivo via mesa</span></div>
+    <p class="bte">NTN-B Principal B2050 · liquidação 17/04/2026 · 459 cotas · executado</p>
+    <p class="btr">IPCA + 6,44% 🔒 · Bucket R$ 500.000 · Saldo bruto atual R$ 478.809</p>
+    <p class="bts">Carrego até 15/08/2050 (24 anos) · sem cupons (NTN-B Principal) · <span class="tip" data-tip="A NTN-B comum paga cupom semestral, e sobre cada cupom o governo cobra 15% de IR. A NTN-B Principal não paga cupom — o juro acumula no título, sem desconto pelo caminho. IR só uma vez, no vencimento. Sua taxa de 6,44% compõe integralmente.">zero drag de IR ⓘ</span> · MTM inicial +R$ 4.154 (+0,87%)</p>
+    <div style="margin-top:8px"><span class="pill pn">Zero drag de IR</span><span class="pill pg_">Máxima convexidade</span><span class="pill pa">Bullet 2050</span></div>
   </div>
 
-  <!-- Vertex recommendation -->
-  <p class="sh">Vértices disponíveis · taxas indicativas Block Trade</p>
-  <div class="g2" style="align-items:start;margin-bottom:14px">
-    <div>
-      <div class="vtx" style="margin-bottom:8px">
-        <div class="vtx-row"><span class="vtx-b">B2033 <span class="badge">7 anos</span></span><span style="font-weight:700">IPCA+7,10%</span></div>
-        <div class="vtx-row"><span class="vtx-b">B2037 <span class="badge">11 anos</span></span><span style="font-weight:700">IPCA+6,92%</span></div>
-        <div class="vtx-row rec"><span class="vtx-b">B2050 <span class="badge rec">★ recomendado</span></span><span style="font-weight:700;color:var(--gr)">IPCA+6,48%</span></div>
-        <div class="vtx-row"><span class="vtx-b">B2060 <span class="badge">34 anos</span></span><span style="font-weight:700">IPCA+6,37%</span></div>
-      </div>
-    </div>
-    <div>
-      <div class="nt nv"><span class="t">★ Por que o B2050 é superior para este projeto</span>
-        A taxa do B2033 (7,10%) é maior que a do B2050 (6,48%), mas essa diferença é ilusória no longo prazo. Ao escolher o B2033, o principal é pago em 2033 — e será necessário reinvestir em condições de mercado desconhecidas. Se os juros caírem (cenário provável com ciclo de cortes), a reinvestiremos a taxas menores. O B2050 elimina esse risco: os juros compostos trabalham ininterruptamente por 24 anos sem nenhuma interrupção. <strong>Quanto mais longa a duration, mais poderoso o efeito dos juros compostos — e menor o risco de reinvestimento.</strong>
-        <br><br>
-        Comparativo em 2046 (R$500k):
-        B2033 + reinvest. IPCA+5% (2033–2037) + IPCA+4% (2037–2046) = <strong>~R$1,49MM real</strong><br>
-        B2050 carregado até 2046 = <strong>~R$1,75MM real (+17%)</strong>
-      </div>
-    </div>
-  </div>
+  <p class="fn">Vértice escolhido: <strong style="color:var(--gd)">B2050 · IPCA+6,44%</strong> · alternativas históricas (B2033, B2037, B2060) não impactam mais o projeto. A maior duration do B2050 maximiza o efeito dos juros compostos por 24 anos sem necessidade de reinvestir o principal em condições futuras de mercado desconhecidas.</p>
 
-  <!-- Drag IR explanation -->
-  <div class="nt gd" style="margin-bottom:14px"><span class="t">O que é o "Drag de IR" — entenda a vantagem do Principal</span>
-    A NTN-B convencional paga cupons semestrais ao investidor. Sobre cada cupom, o governo cobra 15% de Imposto de Renda. Essa mordida representa uma perda de aproximadamente <strong>0,848% ao ano</strong> sobre o patrimônio investido — chamamos isso de "drag de IR". É dinheiro que sai do seu bolso a cada 6 meses e vai direto para a Receita Federal, sem possibilidade de diferimento.<br><br>
-    A <strong>NTN-B Principal resolve esse problema</strong>: ela não paga cupons. Todo o juro fica acumulado no título, compondo sem qualquer desconto. O IR só é pago uma única vez, no vencimento, sobre o ganho total. Resultado: <strong>sua taxa real de 6,48% a 7,10% compõe integralmente — sem nenhuma perda no caminho.</strong>
-  </div>
-
-  <!-- Params -->
   <p class="sh">Parâmetros do modelo · horizonte 20 anos (65 anos · 2046)</p>
   <div class="sg">
     <div class="sb">
-      <p class="bt" style="color:var(--nv)">NTN-B — Track 1 · Principal (travado)</p>
-      <div class="lk"><span class="ll">Taxa NTN-B Principal (fixada no Block Trade)</span><span class="lv">IPCA + 6,48% 🔒 B2050</span></div>
-      <div class="sr"><label>IPCA premissa (%)</label><input type="range" id="sl-ip2" min="3.0" max="8.0" step="0.25" value="6.15" oninput="upd2()"><output id="o-ip2">6,15%</o></div>
+      <p class="bt" style="color:var(--nv)">Track 1 · Principal já investido <span style="color:var(--gd)">(taxa travada)</span></p>
+      <div class="lk"><span class="ll">Taxa NTN-B Principal B2050</span><span class="lv">IPCA + 6,44% 🔒</span></div>
+      <div class="lk" style="background:rgba(27,58,107,.08);border-color:rgba(27,58,107,.4)"><span class="ll">Base que rende juros · 459 cotas</span><span class="lv" style="color:var(--nv)">R$ 474.655</span></div>
+      <p class="fn" style="margin-top:6px">Taxa travada na liquidação · não há slider · juro composto até 2050.</p>
     </div>
     <div class="sb">
-      <p class="bt" style="color:var(--gr)">NTN-B — Track 2 · Aportes futuros 2027+</p>
-      <div class="sr"><label>Taxa aportes 2027–2037 (%)</label><input type="range" id="sl-r3a" min="3.0" max="9.0" step="0.25" value="5.0" oninput="upd2()"><output id="o-r3a">5,00%</o></div>
-      <div class="sr"><label>Taxa aportes 2037–2046 (%)</label><input type="range" id="sl-r3b" min="2.0" max="8.0" step="0.25" value="4.0" oninput="upd2()"><output id="o-r3b">4,00%</o></div>
-      <div class="sr"><label>Aporte anual (R$ k)</label><input type="range" id="sl-ap2" min="200" max="1500" step="50" value="500" oninput="upd2()"><output id="o-ap2">R$ 500k</o></div>
+      <p class="bt" style="color:var(--gr)">Track 2 · Aportes futuros (a partir de abril/2027)</p>
+      <div class="sr"><label>Taxa aportes 2027–2037 (%)</label><input type="range" id="sl-r3a" min="3.0" max="9.0" step="0.25" value="5.0" oninput="upd2()"><output id="o-r3a">5,00%</output></div>
+      <div class="sr"><label>Taxa aportes 2037–2046 (%)</label><input type="range" id="sl-r3b" min="2.0" max="8.0" step="0.25" value="4.0" oninput="upd2()"><output id="o-r3b">4,00%</output></div>
+      <div class="sr"><label>Aporte anual NTN-B (R$ k)</label><input type="range" id="sl-ap2" min="200" max="1500" step="50" value="500" oninput="upd2()"><output id="o-ap2">R$ 500k</output></div>
     </div>
   </div>
 
   <div class="g4">
-    <div class="card ogd"><p class="cl gdc">Track 1 · B2050 em 2046</p><p class="cv gdc" id="v-t1">R$ 1,75MM</p><p class="cs">R$500k @ 6,48% × 20 anos</p></div>
+    <div class="card ogd"><p class="cl gdc">Track 1 · B2050 em 2046</p><p class="cv gdc" id="v-t1">R$ 1,65MM</p><p class="cs">R$ 474.655 @ 6,44% × 20 anos</p></div>
     <div class="card onv"><p class="cl nvc">Total NTN-B @ conservador</p><p class="cv nvc" id="v-tot-ntnb">—</p><p class="cs">Track 1 + Track 2 · real</p></div>
     <div class="card gd"><p class="cl gdc">Total @ taxas de mercado hoje</p><p class="cv gdc" id="v-tot-opt">—</p><p class="cs">Track 2 @ 6,61% como referência</p></div>
-    <div class="card"><p class="cl">Nominal equivalente 2046</p><p class="cv gdc" id="v-nom2" style="font-size:17px">—</p><p class="cs" id="v-nom2-s">× fator IPCA</p></div>
+    <div class="card"><p class="cl"><span class="tip" data-tip="Conversão do valor real (poder de compra de hoje) para reais futuros, aplicando o IPCA premissa de 6,15% a.a. ao longo de 20 anos.">Nominal equivalente 2046 ⓘ</span></p><p class="cv gdc" id="v-nom2" style="font-size:17px">—</p><p class="cs" id="v-nom2-s">× fator IPCA</p></div>
   </div>
 
-  <div class="nt ok" style="margin:12px 0"><span class="t">★ Taxa conservadora IPCA+5% (2027–2037) e IPCA+4% (2037–2046) — qualquer taxa superior é lucro</span>
-    Usamos IPCA+5% como premissa conservadora para os próximos 10 anos (2027–2037) e IPCA+4% para o período final. Hoje o mercado oferece IPCA+6,61% a IPCA+7,10%. Cada ponto percentual capturado acima dessas premissas é retorno adicional não precificado neste modelo. <strong>O gap entre o NTN-B isolado e a meta de R$20MM é coberto com total conforto pelo free float</strong> — que acumula mais de R$20MM real no mesmo período com apenas R$1,2MM/ano a 10% livre de IR.
+  <div class="nt ok" style="margin:12px 0"><span class="t">★ Taxas de aporte futuras conservadoras — qualquer surpresa positiva é lucro</span>
+    Premissas: IPCA+5% (2027–2037) e IPCA+4% (2037–2046). Hoje o mercado oferece IPCA+6,61% a IPCA+7,10%. Cada ponto percentual capturado acima dessas premissas é retorno adicional. <strong>A NTN-B isolada não chega aos R$ 20MM — esse é trabalho do conjunto NTN-B + free float</strong> mostrado na Aba 04 (Dashboard).
   </div>
 
-  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:4px;"><p class="sh" style="margin:0">Evolução ano a ano · Track 1 (Principal B2050) + Track 2 (Aportes futuros)</p><button class="reset-btn" onclick="resetP2()">↺ Restaurar premissas originais</button></div>
-  <p style="font-size:11px;color:var(--text2);margin:-4px 0 8px">2026: fixo (Principal já investido no Block Trade). Aportes futuros editáveis. Linha dourada = Aposentadoria 2046.</p>
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:4px;"><p class="sh" style="margin:0">Evolução ano a ano · Track 1 + Track 2</p><button class="reset-btn" onclick="resetP2()">↺ Restaurar premissas</button></div>
+  <p style="font-size:11px;color:var(--text2);margin:-4px 0 8px">2026: R$ 474.655 (Principal já investido). Aportes futuros editáveis. Linha dourada = Aposentadoria 2046.</p>
   <div class="tw">
     <table style="min-width:760px">
       <thead><tr>
@@ -374,7 +568,6 @@ hr.div{border:none;border-top:1px solid var(--bdr);margin:16px 0;}
         <th>Track 2 · Aportes</th>
         <th>Total real</th>
         <th>Nominal 2046</th>
-        <th>Gap R$20MM</th>
       </tr></thead>
       <tbody id="ap-body"></tbody>
     </table>
@@ -382,199 +575,209 @@ hr.div{border:none;border-top:1px solid var(--bdr);margin:16px 0;}
 
   <p class="sh">Projeção de acumulação NTN-B 2026 → 2046</p>
   <div class="cw h280" style="margin-bottom:8px"><canvas id="ntnbChart" role="img" aria-label="Projeção NTN-B 2026-2046"></canvas></div>
-  <div class="leg"><span><span class="ld" style="background:var(--gd)"></span>Track 1 · Principal B2050</span><span><span class="ld" style="background:var(--nv)"></span>Track 2 · Aportes futuros</span><span><span class="ld" style="background:var(--gr)"></span>Total acumulado</span><span><span class="ldash"></span>Meta R$20MM real</span></div>
+  <div class="leg"><span><span class="ld" style="background:var(--gd)"></span>Track 1 · Principal B2050</span><span><span class="ld" style="background:var(--nv)"></span>Track 2 · Aportes futuros</span><span><span class="ld" style="background:var(--gr)"></span>Total acumulado</span></div>
 
-  <div class="nt rd"><span class="t">Marcação a mercado — volatilidade esperada · irrelevante para o projeto</span>A NTN-B Principal tem máxima duration e reage fortemente a variações de juros reais no curto prazo. Isso pode gerar oscilações relevantes no extrato — para cima ou para baixo. Esse ruído não compromete o projeto: o objetivo é carregar o título até 2050 (ou próximo) capturando a taxa contratada de 6,48%. A taxa está garantida independentemente do que aconteça com o mercado.</div>
+  <div class="nt rd"><span class="t">Marcação a mercado — volatilidade esperada · irrelevante</span>A NTN-B Principal tem máxima duration e reage fortemente a variações de juros reais no curto prazo. Esse ruído não compromete o projeto: o objetivo é carregar até 2050 capturando a taxa contratada de 6,44%.</div>
 </section>
 
-<!-- ═══ P3 BÔNUS ═══ -->
+<!-- ═══ P3 PLANO VS EXECUÇÃO ═══ -->
 <section id="p3" class="pg">
-  <p style="font-size:12.5px;color:var(--text2);margin-bottom:14px">Bônus de R$2MM transferido em tranches de R$500k/dia (limite operacional BTG). Alocação estruturada em 5 destinos estratégicos.</p>
-  <div class="g4" style="margin-bottom:10px">
-    <div class="card nv"><p class="cl">Aposentadoria</p><p class="cv">R$ 500k</p><p class="cs">NTN-B Principal B2050 · IPCA+6,48%</p><span class="pill pn">Block Trade 15/04</span><span class="pill pg_">Sem drag IR</span></div>
-    <div class="card gd"><p class="cl">Reserva Emergência</p><p class="cv">R$ 400k</p><p class="cs">8–9 meses de gastos · D+0/D+1</p><span class="pill pg_">LCA/CDB líquido</span></div>
-    <div class="card gr"><p class="cl">FIIs Cetipados +DY</p><p class="cv">R$ 500k</p><p class="cs">12% DY isento IR · financia os seguros</p><span class="pill pg_">+R$5k/mês extra</span></div>
-    <div class="card bl"><p class="cl">Internacional 🇺🇸</p><p class="cv">R$ 400k</p><p class="cs">US Treasuries · educação Pedro e Joana</p><span class="pill pa">~4,4% USD · 10y</span></div>
-  </div>
-  <div class="g2" style="margin-bottom:14px">
-    <div class="card"><p class="cl">ETFs Brasil</p><p class="cv">R$ 200k</p><p class="cs">IBOV / Small Caps · BTG neutro</p><span class="pill pg_">diversificação tática</span></div>
-    <div class="card ogr"><p class="cl grc">Fluxo de caixa mensal · pós-remanejamento</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">
-        <div><p style="font-size:10px;color:var(--text2)">DY total</p><p style="font-size:18px;font-weight:700;color:var(--gr)">R$51k</p></div>
-        <div><p style="font-size:10px;color:var(--text2)">SAC+Seguros</p><p style="font-size:18px;font-weight:700;color:var(--rd)">R$42k</p></div>
-        <div><p style="font-size:10px;color:var(--text2)">Folga</p><p style="font-size:18px;font-weight:700;color:var(--nv)">R$9k</p></div>
-      </div>
-    </div>
+  <div class="bt-banner">
+    <p class="bte">Bônus 2026 · liquidação coordenada · CONCLUÍDA</p>
+    <p class="btr">R$ 1.667.884 alocados · 104% do plano executável (R$ 1,6MM)</p>
+    <p class="bts">Plano original previa R$ 2MM (incluindo R$200k em ETFs). ETFs reposicionados para reserva ampliada. Cetipados acelerados em +R$268k.</p>
   </div>
 
-  <p class="sh">Projeção internacional · educação Pedro e Joana nos EUA</p>
+  <p class="sh">Plano vs Realizado · 4 buckets do bônus</p>
+  <div class="g4" style="margin-bottom:14px">
+    <div class="card nv"><p class="cl">Aposentadoria · NTN-B B-Principal</p><p class="cv">R$ 500.000</p><p class="cs">previsto R$ 500k · 100% executado</p><span class="pill pn">IPCA+6,44%</span><span class="pill pg_">Sem drag IR</span></div>
+    <div class="card gr"><p class="cl">Cetipados · aceleração tática</p><p class="cv grc">R$ 767.884</p><p class="cs">previsto R$ 500k · 154% executado</p><span class="pill pg_">+R$268k antecipados</span></div>
+    <div class="card bl"><p class="cl">Internacional · Treasuries</p><p class="cv" style="color:var(--bl)">R$ 400.000</p><p class="cs">previsto R$ 400k · 100% executado</p><span class="pill pa">US$ 78,1k em câmbio</span></div>
+    <div class="card"><p class="cl">ETFs · reposicionado</p><p class="cv" style="color:var(--text3)">—</p><p class="cs">previsto R$ 200k · 0% executado</p><span class="pill pn">→ reforço de reserva</span></div>
+  </div>
+
+  <p class="fn">NTN-B Principal · desembolso de R$ 500.000 · valor líquido aplicado R$ 474.655 após R$ 25.345 em taxas operacionais (spread block trade).</p>
+
+  <p class="sh">Reformulação interna · composição da reserva</p>
+  <div class="nt nv"><span class="t">Movimentação independente do bônus · resgates internos coordenados</span>
+    Resgate parcial de DEBB11 (~R$150k em 31/03) e resgate total de IRFM11 (R$ 193.114 em 06/05) compõem com CRI OPEA resgatada (R$ 234.333) a nova reserva de R$ 400k.
+  </div>
+
+  <p class="sh">Impacto no fluxo de dividendos mensais</p>
+  <div class="g3" style="margin-bottom:14px">
+    <div class="card rd"><p class="cl">Efetivo mar-abr/2026</p><p class="cv rdc">R$ 43,9k</p><p class="cs">ramp-up dos novos cetipados</p></div>
+    <div class="card gr"><p class="cl">Base estabilizada (jul/26)</p><p class="cv grc">R$ 52,4k</p><p class="cs">todos pagando + BTGL11 entra</p></div>
+    <div class="card ogr"><p class="cl grc">Pleno (pós-COE realocado out/27)</p><p class="cv grc" style="font-size:22px">R$ 56,7k</p><p class="cs">100% isento IR</p></div>
+  </div>
+
+  <p class="sh">Internacional · projeção USD · educação Pedro e Joana</p>
+  <p class="fn">Custo estimado de 2 universidades top privadas/Ivy nos EUA (~US$ 1,0MM nominais a partir de 2034). Manter ~R$ 400k/ano em aportes ao bucket internacional garante folga confortável.</p>
   <div class="g2" style="align-items:start">
     <div class="cw h200"><canvas id="intlChart" role="img" aria-label="Projeção USD educação filhos"></canvas></div>
     <div class="g2" style="align-content:start">
-      <div class="card"><p class="cl">Hoje (abr/2026)</p><p class="cv">USD 76,9k</p><p class="cs">R$400k @ BRL/USD 5,20</p></div>
-      <div class="card nv"><p class="cl">Pedro · 2034 (18 anos)</p><p class="cv nvc">USD 109k</p><p class="cs">@ 4,4% · 8 anos</p></div>
-      <div class="card nv"><p class="cl">Joana · 2036 (18 anos)</p><p class="cv nvc">USD 119k</p><p class="cs">@ 4,4% · 10 anos</p></div>
-      <div class="card"><p class="cl">2046 (aposentadoria)</p><p class="cv">USD 145k</p><p class="cs">@ 4,4% · 20 anos</p></div>
+      <div class="card rd"><p class="cl">Hoje (13/05/2026)</p><p class="cv rdc">US$ 75,9k</p><p class="cs">MTM -2,27% · cost basis US$ 77,6k</p></div>
+      <div class="card nv"><p class="cl">Pedro · 2034 (18 anos)</p><p class="cv nvc">US$ 830k</p><p class="cs">com R$ 400k/ano até 2034</p></div>
+      <div class="card nv"><p class="cl">Joana · 2036 (18 anos)</p><p class="cv nvc">US$ 1,02MM</p><p class="cs">com R$ 400k/ano até 2036</p></div>
+      <div class="card"><p class="cl">2046 (aposentadoria)</p><p class="cv">US$ 2,3MM</p><p class="cs">se continuar aportando · simulação</p></div>
     </div>
   </div>
-  <div class="nt ok" style="margin-top:12px"><span class="t">✓ Os seguros se pagam com o próprio portfólio</span>Os R$500k realocados para FIIs cetipados a 12% DY isento geram +R$5k/mês. DY total sobe para R$51k. Após SAC (R$35,4k) e seguros (R$6,6k): sobra R$9k/mês. O custo do seguro é zero — a carteira financia sua própria proteção.</div>
+  <div class="nt ok" style="margin-top:12px"><span class="t">✓ Projeto autossustentável · DY supera SAC com folga</span>
+    DY base estabilizada (jul/2026): <strong>R$ 52,4k</strong>. Parcela SAC JP: R$ 35,4k. <strong>Folga mensal: +R$ 17,0k</strong>. Quando COE for realocado (out/2027) alcança R$ 56,7k/mês — folga +R$21,3k/mês.
+  </div>
 </section>
 
-<!-- ═══ P4 SEGUROS ═══ -->
+<!-- ═══ P4 DASHBOARD &amp; TRAJETÓRIA ═══ -->
 <section id="p4" class="pg">
 
-  <div class="nt nv" style="margin-bottom:14px"><span class="t">Dois seguros · dois objetivos completamente distintos</span>
-    <strong>Whole Life R$1,5MM → instrumento sucessório:</strong> garante que Pedro e Joana recebam R$1,5MM livres de ITCMD e inventário, direto nas mãos deles, em até 5 dias. "Não deixar dinheiro para o governo."<br><br>
-    <strong>Invalidez Acidental R$10MM → instrumento de chegada à meta:</strong> garante que, se um acidente incapacitar a Luciana antes de 2046, ela (ou os herdeiros) recebem R$10MM para completar o projeto de aposentadoria. É a rede de segurança que assegura a chegada na meta independentemente do que aconteça durante os 20 anos de acumulação.
-  </div>
-
-  <div class="g4">
-    <div class="card nv"><p class="cl">Whole Life · Capital Segurado</p><p class="cv">R$ 1,5MM</p><p class="cs">Vida Inteira · pago em 10 anos · resgatável</p></div>
-    <div class="card"><p class="cl">Invalidez Acidental · Capital</p><p class="cv">R$ 10MM</p><p class="cs">Invalidez total e parcial por acidente</p></div>
-    <div class="card ogd"><p class="cl gdc">Objetivos distintos</p><p class="cv gdc" style="font-size:15px">Sucessão + Chegada</p><p class="cs">WL = herança · Invalidez = garantia da meta</p></div>
-    <div class="card rd"><p class="cl">Custo total mensal</p><p class="cv rdc">R$ 6.633</p><p class="cs">WL R$6.046 + Invalidez R$587</p></div>
-  </div>
-
-  <p class="sh">Comparativo de pagamento · WL R$1,5MM</p>
-  <div class="g2" style="margin-bottom:14px">
-    <div class="wlo">
-      <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--nv);margin-bottom:10px">Opção 1 · Mensal · 120 parcelas</p>
-      <div class="g2">
-        <div class="card"><p class="cl">Parcela c/ IOF</p><p class="cv" style="font-size:18px">R$ 6.046</p><p class="cs">por mês · 10 anos</p></div>
-        <div class="card"><p class="cl">Total quitado</p><p class="cv" style="font-size:18px">R$ 725k</p><p class="cs">R$72.555/ano</p></div>
-      </div>
-    </div>
-    <div class="wlo rec">
-      <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--gr);margin-bottom:10px">★ Opção 2 · Anual · 10 parcelas · Recomendada</p>
-      <div class="g2">
-        <div class="card"><p class="cl">Parcela anual c/ IOF</p><p class="cv" style="font-size:18px">R$ 68.474</p><p class="cs">por ano · 10 anos</p></div>
-        <div class="card gr"><p class="cl">Economia vs mensal</p><p class="cv grc" style="font-size:18px">R$ 40,8k</p><p class="cs">pago do bônus anual</p></div>
-      </div>
-    </div>
-  </div>
-
-  <p class="sh">Argumentos estratégicos · por que contratar agora</p>
-  <div class="nt ok"><span class="t">★ ITCMD SP · Pedro e Joana economizam até R$1,6MM em impostos de herança</span>Patrimônio projetado da Luciana aos 65 anos: R$50MM+. O ITCMD progressivo de SP sobre R$20MM pode chegar a 8% = <strong>R$1,6MM em impostos</strong>, além de inventário, advogado e anos de espera. O Whole Life de R$1,5MM é 100% isento de ITCMD, fora do inventário, pago diretamente a Pedro e Joana em até 5 dias. Não é custo — é transferência planejada de riqueza. Quando o NTN-B atingir a meta, ela pode resgatar o WL (~R$827k) e usar como quiser.</div>
-  <div class="nt ok"><span class="t">★ No Ano 10 o resgate supera o total pago — custo líquido zero</span>Total pago em 10 anos: R$684.742. Valor de resgate no Ano 10: R$723.495. O seguro custou zero — a Prudential devolveu mais do que recebeu. Aos 65 anos (2046): resgate disponível de ~R$940k (com IPCA+3% técnico).</div>
-  <div class="nt ok"><span class="t">✓ Risco congelado · 44 anos é o melhor momento · urgência real</span>O prêmio é calculado com base na idade na contratação e fica travado para sempre. Cada ano sem contratar eleva o custo de forma irreversível. A proposta é de hoje — postergar tem custo financeiro mensurável e permanente.</div>
-  <div class="nt"><span class="t">Invalidez Acidental R$10MM · R$587/mês · garantia da chegada na meta</span>Por R$587/mês, qualquer acidente que incapacite a Luciana antes de 2046 resulta em R$10MM pagos à vista — capital suficiente para completar o projeto de aposentadoria sem depender de mais anos de trabalho ou acumulação. Total de prêmios em 20 anos: R$140.880 para R$10MM de proteção.</div>
-
-  <p class="sh">Evolução do Whole Life · anos-chave · dados Prudential</p>
-  <div class="nt rd" style="margin-bottom:10px"><span class="t">Atenção — os valores de resgate da tabela abaixo consideram apenas os 3% técnicos fixos</span>A Prudential aplica IPCA por cima mensalmente (conforme notas do plano). Os valores nominais reais serão superiores aos listados. Abaixo apresentamos a tabela oficial da Prudential e uma simulação de resgate com IPCA+3% para referência.</div>
-  <div class="tw">
-    <table style="min-width:560px">
-      <thead><tr><th style="text-align:left">Ano / Idade</th><th>Capital segurado</th><th>Total quitado</th><th>Resgate (3% técnico)</th><th>Resgate simulado IPCA+3%</th><th>Status</th></tr></thead>
-      <tbody id="wl-body"></tbody>
-    </table>
-  </div>
-  <div class="cw h200" style="margin-bottom:8px"><canvas id="wlChart" role="img" aria-label="Evolução resgate WL"></canvas></div>
-  <div class="leg"><span><span class="ld" style="background:var(--nv)"></span>Resgate tabela Prudential (3% fixo)</span><span><span class="ld" style="background:var(--gd)"></span>Resgate simulado (IPCA+3%)</span><span><span class="ld" style="background:var(--gr)"></span>Capital segurado R$1,5MM</span></div>
-  <p style="font-size:10px;color:var(--text2);margin-top:4px">Simulação com IPCA 6,15% a.a. sobre a base 3% técnico. Valores são projeções e não garantias contratuais.</p>
-</section>
-
-<!-- ═══ P5 DASHBOARD ═══ -->
-<section id="p5" class="pg">
-
-  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:4px;"><p class="sh" style="margin:0">Parâmetros editáveis · todos os gráficos atualizam em tempo real</p><button class="reset-btn" onclick="resetP5()">↺ Restaurar premissas originais</button></div>
+  <p class="sh">Parâmetros editáveis · cenário "manter o ritmo"</p>
+  <p class="fn">Os parâmetros do bucket NTN-B (taxa do principal travado, taxa Track 2) seguem o modelo da Aba 02. Aqui você ajusta o tamanho do <strong>próximo bônus</strong> (abr/2027 em diante) e premissas do free float / imóvel.</p>
   <div class="sg">
     <div class="sb">
-      <p class="bt" style="color:var(--nv)">NTN-B</p>
-      <div class="lk"><span class="ll">NTN-B Principal B2050 (travado)</span><span class="lv">IPCA+6,48% 🔒</span></div>
-      <div class="sr"><label>Taxa aportes 2027–2037 (%)</label><input type="range" id="sl-r3a-d" min="3.0" max="9.0" step="0.25" value="5.0" oninput="upd5()"><output id="o-r3a-d">5,00%</o></div>
-      <div class="sr"><label>Taxa aportes 2037–2046 (%)</label><input type="range" id="sl-r3b-d" min="2.0" max="8.0" step="0.25" value="4.0" oninput="upd5()"><output id="o-r3b-d">4,00%</o></div>
-      <div class="sr"><label>Aporte anual NTN-B (R$ k)</label><input type="range" id="sl-ap" min="200" max="1500" step="50" value="500" oninput="upd5()"><output id="o-ap">R$ 500k</o></div>
+      <p class="bt" style="color:var(--nv)">Próximos bônus (abr/2027+)</p>
+      <div class="sr"><label>Aporte total anual (R$ MM)</label><input type="range" id="sl-bon" min="0.5" max="2.5" step="0.1" value="1.5" oninput="upd5()"><output id="o-bon">R$ 1,5MM</output></div>
+      <div class="sr"><label>Parcela NTN-B (R$ k)</label><input type="range" id="sl-ap" min="0" max="1500" step="50" value="500" oninput="upd5()"><output id="o-ap">R$ 500k</output></div>
+      <p class="fn" style="margin-top:6px">Diferença vai para <strong>free float</strong> (cetipados + internacional) compondo a taxa abaixo.</p>
     </div>
     <div class="sb">
-      <p class="bt" style="color:var(--gr)">Free Float &amp; Outros</p>
-      <div class="sr"><label>Free float anual (R$ MM)</label><input type="range" id="sl-ff" min="0.5" max="3.0" step="0.1" value="1.2" oninput="upd5()"><output id="o-ff">R$ 1,2MM</o></div>
-      <div class="sr"><label>Rentabilidade free float (% a.a.)</label><input type="range" id="sl-rf" min="6.0" max="14.0" step="0.5" value="10.0" oninput="upd5()"><output id="o-rf">10,0%</o></div>
-      <div class="sr"><label>Valorização imóvel VNC (% a.a.)</label><input type="range" id="sl-im" min="4.0" max="12.0" step="0.5" value="7.0" oninput="upd5()"><output id="o-im">7,0%</o></div>
-      <div class="sr"><label>IPCA premissa (% a.a.)</label><input type="range" id="sl-ip" min="3.0" max="8.0" step="0.25" value="6.15" oninput="upd5()"><output id="o-ip">6,15%</o></div>
+      <p class="bt" style="color:var(--gr)">Premissas de mercado</p>
+      <div class="sr"><label>Rentab. <span class="tip" data-tip="Free float = cetipados isentos + internacional + outros. Premissa: 10% nominal a.a. já considera mix entre FIIs cetipados (12-15%) e renda mais conservadora (6-8%).">free float ⓘ</span> (% a.a. nominal)</label><input type="range" id="sl-rf" min="6.0" max="14.0" step="0.5" value="10.0" oninput="upd5()"><output id="o-rf">10,0%</output></div>
+      <div class="sr"><label>Valorização imóveis (% a.a. nominal)</label><input type="range" id="sl-im" min="2.0" max="12.0" step="0.5" value="6.0" oninput="upd5()"><output id="o-im">6,0%</output></div>
+      <div class="sr"><label>IPCA premissa (% a.a.)</label><input type="range" id="sl-ip" min="3.0" max="8.0" step="0.25" value="6.15" oninput="upd5()"><output id="o-ip">6,15%</output></div>
     </div>
   </div>
+  <button class="reset-btn" onclick="resetP5()">↺ Restaurar premissas</button>
 
-  <p class="sh">Patrimônio acumulado projetado · 2046 (65 anos) · valores reais (poder de compra de 2026)</p>
+  <p class="sh">Cenário A vs Cenário B · em valor de hoje (real)</p>
+  <div class="scen-cmp">
+    <div class="scen-box A">
+      <p class="sht">Cenário A · Parar de aportar hoje</p>
+      <p class="sht2">Tudo o que está investido segue compondo, sem novos aportes do bônus</p>
+      <div class="smr">
+        <div class="smc"><p class="sml">Líquido em 2046</p><p class="smv" id="sa-liq">—</p><p class="sms">poder de compra hoje</p></div>
+        <div class="smc"><p class="sml">Data atinge R$ 20MM</p><p class="smv" id="sa-date">—</p><p class="sms">se não chega: nunca no horizonte</p></div>
+        <div class="smc"><p class="sml">Imobilizado em 2046</p><p class="smv" id="sa-imo">—</p><p class="sms">JP + Santos · valor real</p></div>
+        <div class="smc"><p class="sml">Total em 2046</p><p class="smv" id="sa-tot">—</p><p class="sms">líquido + imobilizado</p></div>
+      </div>
+    </div>
+    <div class="scen-box B">
+      <p class="sht">Cenário B · Manter o ritmo · ★ recomendado</p>
+      <p class="sht2">Continua aportando o bônus anual na mesma proporção do executado em 2026</p>
+      <div class="smr">
+        <div class="smc"><p class="sml">Líquido em 2046</p><p class="smv" id="sb-liq">—</p><p class="sms">poder de compra hoje</p></div>
+        <div class="smc"><p class="sml">Data atinge R$ 20MM</p><p class="smv" id="sb-date">—</p><p class="sms">idade da Luciana naquela data</p></div>
+        <div class="smc"><p class="sml">Imobilizado em 2046</p><p class="smv" id="sb-imo">—</p><p class="sms">JP + Santos · valor real</p></div>
+        <div class="smc"><p class="sml">Total em 2046</p><p class="smv" id="sb-tot">—</p><p class="sms">líquido + imobilizado</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="scen-diff">
+    <p class="sdl">Valor da disciplina anual de aporte (em poder de compra hoje)</p>
+    <p class="sdv" id="diff-val">—</p>
+    <p class="sds">É quanto a Luciana abre mão de patrimônio em 2046 se parar de aportar o bônus hoje.</p>
+  </div>
+
+  <p class="sh">Patrimônio em 2046 · valores reais por componente</p>
   <div class="g5">
-    <div class="card nv"><p class="cl">NTN-B</p><p class="cv nvc" id="c-ntnb">—</p><p class="cs">real · Track 1 + Track 2</p><div class="nom-box"><p class="nl">Nominal 2046</p><p class="nv-val" id="n-ntnb">—</p><p class="ns">em reais futuros</p></div></div>
-    <div class="card gr"><p class="cl">Free Float</p><p class="cv grc" id="c-ff">—</p><p class="cs">real · bônus excedente</p><div class="nom-box"><p class="nl">Nominal 2046</p><p class="nv-val" id="n-ff">—</p><p class="ns">em reais futuros</p></div></div>
-    <div class="card gd"><p class="cl">Imóvel VNC</p><p class="cv gdc" id="c-im">—</p><p class="cs">real · SAC quitado 2044</p><div class="nom-box"><p class="nl">Nominal 2046</p><p class="nv-val" id="n-im">—</p><p class="ns">em reais futuros</p></div></div>
-    <div class="card bl"><p class="cl">Project Finance</p><p class="cv" style="color:var(--bl)">R$ 4,9MM</p><p class="cs">estável · máquina de renda</p><div style="background:rgba(24,95,165,.1);border-radius:var(--rsm);padding:6px;margin-top:5px;text-align:center"><p style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;color:var(--bl);font-weight:700">Renda mensal</p><p style="font-size:16px;font-weight:800;color:var(--bl)">R$46k/mês</p><p style="font-size:10px;color:var(--text2)">vitalícia · isenta IR</p></div></div>
-    <div class="card onv"><p class="cl nvc">Total real 2046</p><p class="cv nvc" id="c-tot" style="font-size:22px">—</p><p class="cs" id="c-tot-s">poder de compra de 2026</p><div class="nom-box"><p class="nl">Total nominal 2046</p><p class="nv-val" id="n-tot" style="font-size:20px">—</p><p class="ns" id="n-tot-s">em reais futuros de 2046</p></div></div>
+    <div class="card nv"><p class="cl">NTN-B (líquido)</p><p class="cv nvc" id="c-ntnb">—</p><p class="cs">Track 1 + Track 2</p><div class="nom-box"><p class="nl">Nominal 2046</p><p class="nv-val" id="n-ntnb">—</p><p class="ns">em reais futuros</p></div></div>
+    <div class="card gr"><p class="cl">Free Float (líquido)</p><p class="cv grc" id="c-ff">—</p><p class="cs">cetipados + internacional</p><div class="nom-box"><p class="nl">Nominal 2046</p><p class="nv-val" id="n-ff">—</p><p class="ns">em reais futuros</p></div></div>
+    <div class="card bl"><p class="cl">Carteira renda atual</p><p class="cv" style="color:var(--bl)">R$ 6,66MM</p><p class="cs">DY paga SAC · mantém poder de compra</p><div style="background:rgba(24,95,165,.1);border-radius:var(--rsm);padding:6px;margin-top:5px;text-align:center"><p style="font-size:9px;text-transform:uppercase;letter-spacing:.7px;color:var(--bl);font-weight:700">Renda mensal</p><p style="font-size:16px;font-weight:800;color:var(--bl)">R$52-57k/mês</p><p style="font-size:10px;color:var(--text2)">vitalícia · isenta IR</p></div></div>
+    <div class="card gd"><p class="cl">Imóveis (imobilizado)</p><p class="cv gdc" id="c-im">—</p><p class="cs">JP líquido + Santos · 6% nominal</p><div class="nom-box"><p class="nl">Nominal 2046</p><p class="nv-val" id="n-im">—</p><p class="ns">em reais futuros</p></div></div>
+    <div class="card onv"><p class="cl nvc">Patrimônio Líquido (meta)</p><p class="cv nvc" id="c-liq" style="font-size:22px">—</p><p class="cs" id="c-liq-s">poder de compra de 2026</p><div class="nom-box"><p class="nl">Total Líquido nominal 2046</p><p class="nv-val" id="n-liq" style="font-size:18px">—</p><p class="ns" id="n-liq-s">em reais futuros de 2046</p></div></div>
   </div>
 
-  <div class="rc" style="margin-top:14px">
-    <p class="rc-t">Project Finance · Renda passiva mensal · máquina de renda vitalícia · não entra no cálculo de acumulação</p>
-    <div class="rg4">
-      <div class="ri"><p class="rl">Hoje (2026)</p><p class="rv">R$ 46k/mês</p><p class="rs">100% isento IR · cobre SAC</p></div>
-      <div class="ri"><p class="rl">2046 · SAC quitado</p><p class="rv">R$ 46k+ livre</p><p class="rs">renda pura · sem deduções</p></div>
-      <div class="ri"><p class="rl">Equivalente anual</p><p class="rv">R$ 552k/ano</p><p class="rs">isento IR · vitalício</p></div>
-      <div class="ri"><p class="rl">Capital equivalente</p><p class="rv">≈ R$ 5,5MM</p><p class="rs">necessário @ 10% a.a.</p></div>
-    </div>
-  </div>
-
-  <div class="mi">
-    <div>
-      <p class="mi-l">Meta NTN-B isolado · R$20MM real</p>
-      <p style="font-size:13px">NTN-B @ conservador (5%→4%) chega a <strong id="meta-val">—</strong> aos 65a. <strong style="color:var(--gr)">Gap coberto com conforto total pelo free float</strong> que acumula <span id="ff-val">—</span> real no mesmo período.</p>
-    </div>
-    <div style="text-align:right">
-      <p style="font-size:10px;color:var(--text2)">Se aportes futuros = mercado hoje (6,61%)</p>
-      <p style="font-size:19px;font-weight:800;color:var(--nv)" id="meta-opt">—</p>
-    </div>
-  </div>
-
-  <p class="sh">Acumulação patrimonial 2026 → 2046 · valores reais empilhados</p>
-  <div class="cw h300" style="margin-bottom:8px"><canvas id="mainChart" role="img" aria-label="Projeção consolidada 2026-2046"></canvas></div>
-  <div class="leg"><span><span class="ld" style="background:var(--nv)"></span>NTN-B (real)</span><span><span class="ld" style="background:var(--gr)"></span>Free float (real)</span><span><span class="ld" style="background:var(--gd)"></span>Imóvel VNC (real)</span><span><span class="ld" style="background:var(--bl)"></span>Project Finance</span><span><span class="ldash"></span>Meta NTN-B R$20MM</span></div>
-
-  <div class="g2" style="margin-bottom:14px">
-    <div><p class="sh">NTN-B · Track 1 (Principal) + Track 2 (Aportes)</p><div class="cw h200"><canvas id="ntnbChartD" role="img" aria-label="Decomposição NTN-B"></canvas></div></div>
-    <div><p class="sh">Free Float · R$1,2MM/ano @ 10% livre IR</p><div class="cw h200"><canvas id="ffChart" role="img" aria-label="Free float acumulado"></canvas></div></div>
-  </div>
-
-  <p class="sh">Patrimônio imobilizado · Imóvel Vila Nova Conceição</p>
-  <div class="g2" style="align-items:start;margin-bottom:14px">
-    <div class="cw h200"><canvas id="imChart" role="img" aria-label="Valorização imóvel VNC"></canvas></div>
-    <div class="g2" style="align-content:start">
-      <div class="card"><p class="cl">Hoje (abr/2026)</p><p class="cv gdc">R$ 5,25MM</p></div>
-      <div class="card rd"><p class="cl">Saldo SAC hoje</p><p class="cv rdc">R$ 2,44MM</p><p class="cs">quita fev/2044</p></div>
-      <div class="card gr"><p class="cl">PL líquido hoje</p><p class="cv grc">R$ 2,81MM</p></div>
-      <div class="card gd" style="grid-column:1/3"><p class="cl gdc">Nominal projetado 2046</p><p class="cv gdc" id="im-2046" style="font-size:22px">—</p><p class="cs">Vila Nova Conceição @7%a.a. · 20a · SAC quitado</p></div>
-    </div>
-  </div>
-
-  <p class="sh">Timeline · 2026 → 2046</p>
-  <div class="tl">
-    <div class="tli"><div class="tld" style="background:var(--gd)"></div><p class="tly" style="color:var(--gd)">Abr/2026</p><p class="tls">NTN-B Principal<br>B2050 · R$500k</p></div>
-    <div class="tli"><div class="tld" style="background:var(--bl)"></div><p class="tly" style="color:var(--bl)">Abr/2027</p><p class="tls">LCA vence<br>R$802k reinvestir</p></div>
-    <div class="tli"><div class="tld" style="background:var(--gr)"></div><p class="tly" style="color:var(--gr)">2034–35</p><p class="tls">WL quitado<br>Pedro 18a<br>USD 109k</p></div>
-    <div class="tli"><div class="tld" style="background:var(--gr)"></div><p class="tly" style="color:var(--gr)">2036</p><p class="tls">Joana 18a<br>USD 119k<br>educação</p></div>
-    <div class="tli"><div class="tld" style="background:#854F0B"></div><p class="tly" style="color:#854F0B">2037</p><p class="tls">Revisão taxas<br>IPCA+4% →</p></div>
-    <div class="tli"><div class="tld" style="background:var(--gr)"></div><p class="tly" style="color:var(--gr)">Fev/2044</p><p class="tls">SAC quitado<br>+R$35k/mês</p></div>
-    <div class="tli"><div class="tld" style="background:var(--gr)"></div><p class="tly" style="color:var(--gr)">2050</p><p class="tls">Principal vence<br>B2050 pago</p></div>
-    <div class="tli"><div class="tld" style="width:13px;height:13px;background:var(--nv);border:2px solid var(--gd)"></div><p class="tly" style="color:var(--nv)">★ 2046</p><p class="tls">Aposentadoria<br>65 anos<br>WL R$940k</p></div>
+  <p class="sh">Trajetória 2026 → 2046 · valores reais empilhados</p>
+  <div class="cw h360" style="margin-bottom:8px"><canvas id="mainChart" role="img" aria-label="Projeção consolidada 2026-2046"></canvas></div>
+  <div class="leg">
+    <span><span class="ld" style="background:var(--nv)"></span>NTN-B (líquido)</span>
+    <span><span class="ld" style="background:var(--gr)"></span>Free float (líquido)</span>
+    <span><span class="ld" style="background:var(--bl)"></span>Carteira renda (mantém)</span>
+    <span><span class="ld" style="background:var(--gd)"></span>Imóveis (imobilizado)</span>
+    <span><span class="ldash"></span>Meta R$ 20MM líquido</span>
   </div>
 
   <hr class="div">
   <p class="sh">Notas estratégicas</p>
-  <div class="nt nv"><span class="t">★ O projeto NTN-B é a âncora — não a única fonte de riqueza</span>Os R$500k/ano em NTN-B representam 25–33% do bônus anual. Os outros R$1–1,5MM formam o "free float" — capital que compõe em ativos diversificados a 10%+ livre de IR. A combinação coloca a Luciana em R$47MM+ real aos 65 anos. A meta de R$20MM em NTN-B é o piso conservador e estruturado. <strong>O free float cobre com total conforto qualquer gap da meta NTN-B isolada</strong> — e vai muito além disso.</div>
-  <div class="nt ok"><span class="t">✓ Por que separar NTN-B do free float</span>O NTN-B é um compromisso formal e intransferível: taxa travada, compõe sem interferência, protegido por dois seguros. O free float é flexível. A separação cria disciplina: a aposentadoria está garantida independentemente do que aconteça com os investimentos livres.</div>
-  <div class="nt gd"><span class="t">★ O imóvel VNC · patrimônio imobilizado que valoriza</span>Vila Nova Conceição é um dos mercados imobiliários mais resilientes de São Paulo. A R$5,25MM hoje, projetado para ~R$20MM nominal em 2046, representa patrimônio imobilizado de altíssimo valor — já quitado em 2044. Em 2046, a Luciana pode manter, vender ou usar como colateral.</div>
-  <div class="nt ok"><span class="t">✓ Os seguros garantem a chegada — não importa o que aconteça</span>WL R$1,5MM: Pedro e Joana recebem livres de ITCMD em 5 dias, sem inventário. Invalidez R$10MM: se a Luciana for incapacitada antes de 2046, o patrimônio chega ao destino. Se nada acontecer: resgate WL (~R$940k em 2046) volta ao portfólio dela.</div>
+  <div class="nt nv"><span class="t">★ A NTN-B é a âncora, não a única fonte</span>Os R$500k/ano em NTN-B representam 33% do bônus anual de R$1,5MM. Os outros R$1MM formam o <span class="tip" data-tip="Free float = capital não-comprometido com a aposentadoria estrita. Compõe a ~10% nominal isento e cobre com folga o gap da meta NTN-B isolada.">free float ⓘ</span> — capital flexível composto em cetipados isentos.</div>
+  <div class="nt ok"><span class="t">✓ A meta é R$ 20MM líquido — imóveis são folga adicional</span>Se a Luciana decidir vender JP ou Santos no futuro, o valor migra para líquido e antecipa significativamente a data de liberdade financeira. Hoje o imobilizado vale R$ 3,31MM real e cresce a 6% nominal a.a.</div>
+  <div class="nt gd"><span class="t">★ Imóveis em premissa de 6% nominal a.a.</span>Premissa moderadamente conservadora. Historicamente Jardim Paulistano e Santos entregam 6-8% nominal a.a. — usar 6% protege as projeções de surpresas negativas.</div>
 </section>
 
-<div class="footer">Premissas: NTN-B Principal B2050 IPCA+6,48% (Block Trade abr/2026) · Aportes futuros IPCA+5% (2027–2037) e IPCA+4% (2037–2046) · IPCA 6,15%a.a. · Imóvel VNC @7%a.a. · Free float 10%a.a. líquido IR · BTG Asset Strategy Abril/2026 — Álvaro Frasson. Material exclusivo Cordier Investimentos. Não constitui oferta de valores mobiliários. Projeções não garantem rentabilidade futura.</div>
+<!-- ═══ P5 AGENDA ═══ -->
+<section id="p5" class="pg">
+
+  <div class="lmb">
+    <h4>📅 Lembrete · agendar próxima reunião trimestral</h4>
+    <p>Sem data confirmada ainda. <strong>Sugestão:</strong> agendar para a primeira quinzena de <strong>agosto/2026</strong> para revisar o ramp-up dos cetipados e fechar a tese para o bônus de abr/2027. Itens prioritários: realocação DEBB11 → BCDI11, alocação residual R$ 79,7k, conferência do DY estabilizado pós-jul/26.</p>
+  </div>
+
+  <p class="sh">Próximas ações pendentes · curto prazo</p>
+  <div class="ag-mo">
+    <h4>🎯 Ações táticas em aberto</h4>
+    <div class="ag-ev wn"><div class="ae-l"><p class="ae-d">curto prazo · próxima reunião</p><p class="ae-t">DEBB11 · realocar R$ 151,7k para BCDI11</p><p class="ae-s">Lucro latente +R$ 11.836 (+8,46%) · curva de juros mudou · impacto +R$ 1,2k/mês DY</p></div><p class="ae-v amc">★ recomendado</p></div>
+    <div class="ag-ev wn"><div class="ae-l"><p class="ae-d">curto prazo</p><p class="ae-t">Residual R$ 79,7k · alocação definitiva</p><p class="ae-s">Sugestão: BCDI11 (119% CDI) ou ROPP11 (15,59% 12m) · impacto +R$ 1k/mês DY</p></div><p class="ae-v amc">a decidir</p></div>
+  </div>
+
+  <p class="sh">Calendário de marcos 2026-2050</p>
+  <div class="ag-mo">
+    <h4>📅 2026 · ano da transição</h4>
+    <div class="ag-ev"><div class="ae-l"><p class="ae-d">17/04/2026 ✓</p><p class="ae-t">NTN-B Principal B2050 · liquidação</p><p class="ae-s">R$ 500k · IPCA+6,44% · 459 cotas · executado</p></div><p class="ae-v grc">concluído</p></div>
+    <div class="ag-ev"><div class="ae-l"><p class="ae-d">jun-ago/2026</p><p class="ae-t">Ramp-up dos cetipados</p><p class="ae-s">Carências D+30/D+60 expiram · DY converge de R$ 43,9k → R$ 52,4k/mês</p></div><p class="ae-v">em curso</p></div>
+    <div class="ag-ev cr"><div class="ae-l"><p class="ae-d">ago/2026 (a confirmar)</p><p class="ae-t">Revisão trimestral #1</p><p class="ae-s">Cordier · revisão de tese e premissas</p></div><p class="ae-v grc">a agendar</p></div>
+    <div class="ag-ev cr"><div class="ae-l"><p class="ae-d">nov/2026 (a confirmar)</p><p class="ae-t">Revisão trimestral #2</p><p class="ae-s">Cordier · planejamento bônus abr/2027</p></div><p class="ae-v grc">a agendar</p></div>
+  </div>
+
+  <div class="ag-mo">
+    <h4>📅 2027 · ano dos vencimentos</h4>
+    <div class="ag-ev wn"><div class="ae-l"><p class="ae-d">abr/2027</p><p class="ae-t">Bônus 2027 · próxima alocação grande</p><p class="ae-s">Aplicar mesma proporção do bônus 2026 (NTN-B + cetipados + internacional) — discutir em ago/2026</p></div><p class="ae-v amc">decisão</p></div>
+    <div class="ag-ev wn"><div class="ae-l"><p class="ae-d">08/04/2027</p><p class="ae-t">LCA BTG vence · R$ 801.924</p><p class="ae-s">Reinvestir em FII cetipado ou crédito privado IPCA+ para manter DY</p></div><p class="ae-v amc">reinvestir</p></div>
+    <div class="ag-ev dt"><div class="ae-l"><p class="ae-d">22/10/2027</p><p class="ae-t">COE Credit Suisse vence · R$ 200k+ liberados</p><p class="ae-s">Realocar IMEDIATAMENTE em FIIs/FIPs isentos · impacto +R$ 4,3k/mês DY</p></div><p class="ae-v rdc">prioridade</p></div>
+  </div>
+
+  <div class="ag-mo">
+    <h4>📅 2028-2033 · acumulação silenciosa</h4>
+    <div class="ag-ev"><div class="ae-l"><p class="ae-d">2028-2033</p><p class="ae-t">Aportes anuais R$ 1,5MM (R$ 500k NTN-B + R$ 1MM free float)</p><p class="ae-s">Revisões trimestrais para acompanhar trajetória rumo à meta</p></div><p class="ae-v">contínuo</p></div>
+    <div class="ag-ev cr"><div class="ae-l"><p class="ae-d">~2033</p><p class="ae-t">★ Patrimônio líquido cruza R$ 20MM real</p><p class="ae-s">Data prevista de independência financeira · idade ~52 anos</p></div><p class="ae-v grc">★ META</p></div>
+    <div class="ag-ev"><div class="ae-l"><p class="ae-d">17/07/2034</p><p class="ae-t">CDCA BTG vence · R$ 62k</p><p class="ae-s">Reinvestir em CDCA ou similar para manter exposição agro isenta</p></div><p class="ae-v">renovar</p></div>
+  </div>
+
+  <div class="ag-mo">
+    <h4>📅 2034-2036 · educação dos filhos</h4>
+    <div class="ag-ev wn"><div class="ae-l"><p class="ae-d">15/08/2034</p><p class="ae-t">T-Note 3,875% vence + Pedro 18a</p><p class="ae-s">Cupom de US$ disponível para custear primeiros anos de universidade do Pedro</p></div><p class="ae-v amc">Pedro 18a</p></div>
+    <div class="ag-ev wn"><div class="ae-l"><p class="ae-d">15/08/2035</p><p class="ae-t">T-Note 4,25% vence</p><p class="ae-s">Renovar ou usar para complementar educação Pedro</p></div><p class="ae-v amc">decisão</p></div>
+    <div class="ag-ev wn"><div class="ae-l"><p class="ae-d">15/02/2036</p><p class="ae-t">T-Bond 4,5% vence + Joana 18a</p><p class="ae-s">Cupom de US$ disponível para custear universidade da Joana</p></div><p class="ae-v amc">Joana 18a</p></div>
+  </div>
+
+  <div class="ag-mo">
+    <h4>📅 2044 · liberdade total da SAC</h4>
+    <div class="ag-ev cr"><div class="ae-l"><p class="ae-d">fev/2044</p><p class="ae-t">SAC Jardim Paulistano · ÚLTIMA PARCELA</p><p class="ae-s">+R$ 35,4k/mês livres · DY 100% renda pura · imóvel JP totalmente quitado</p></div><p class="ae-v grc">★ marco</p></div>
+  </div>
+
+  <div class="ag-mo">
+    <h4>📅 2046 · 65 anos · alvo de longo prazo</h4>
+    <div class="ag-ev cr"><div class="ae-l"><p class="ae-d">2046 · 65 anos</p><p class="ae-t">Patrimônio líquido projetado (mantendo ritmo)</p><p class="ae-s">Trajetória bem acima da meta · ver Aba 04 para projeção interativa com parâmetros editáveis · renda passiva isenta cresce conforme SAC vai sendo amortizada</p></div><p class="ae-v grc">horizonte</p></div>
+  </div>
+
+  <div class="ag-mo">
+    <h4>📅 2050 · vencimento NTN-B Principal</h4>
+    <div class="ag-ev cr"><div class="ae-l"><p class="ae-d">15/08/2050</p><p class="ae-t">NTN-B Principal B2050 · pagamento final</p><p class="ae-s">Track 1 de R$ 474.655 cresce para ~R$ 2,2MM nominal (R$ 1,65MM real)</p></div><p class="ae-v grc">liquidação</p></div>
+  </div>
+
+  <hr class="div">
+  <p class="fn" style="text-align:center">Cadência de revisões: trimestral · A cliente pode acompanhar esta landing entre reuniões para visualizar o progresso do projeto.</p>
+</section>
+
+<div class="footer">Premissas: NTN-B Principal B2050 IPCA+6,44% (Block Trade abr/2026 · bucket R$ 500.000 · líquido aplicado R$ 474.655 · 459 cotas) · Aportes NTN-B futuros IPCA+5% (2027–2037) e IPCA+4% (2037–2046) · Free float 10% a.a. nominal isento · IPCA 6,15% a.a. · Imóveis 6% a.a. nominal · Meta R$ 20MM patrimônio líquido financeiro em poder de compra de 2026. Material exclusivo Cordier Investimentos. Não constitui oferta de valores mobiliários. Projeções não garantem rentabilidade futura.</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-/* PASSWORD */
 function chk(){
   const v=document.getElementById('gate-in').value;
   if(btoa(v)==='THVjaWFuYTIwMjY='){
     document.getElementById('gate').style.display='none';
     document.getElementById('app').style.display='block';
-    initP1();
+    initDivChart();
+    computeHero();
   } else {
     document.getElementById('gate-err').textContent='Senha incorreta.';
     document.getElementById('gate-in').value='';
@@ -582,68 +785,146 @@ function chk(){
   }
 }
 
-/* CONSTS */
 const C={};
-const R1=0.0648; /* B2050 */
+const R1=0.0644;                /* NTN-B Track 1 real */
 const ANOS=20;
 const YRS=Array.from({length:ANOS+1},(_,i)=>2026+i);
-const bonuses=Array.from({length:ANOS+1},()=>500);
+const T1_INITIAL=0.474655;      /* MM */
+const LIQ_INIT=7.12;            /* MM Patrimônio Líquido total hoje */
+const STABLE=6.262+0.384;       /* MM income portfolio (inclui reserva) + internacional (flat real). NTN-B é separado. Total inicial = 0.478 + STABLE = 7.12 */
+const FF_REAL=0.035;            /* free float 3,5% real */
+const IPCA=0.0615;
+const JP_MKT=5.25;              /* MM valor mercado */
+const JP_SAC_0=2.44;            /* MM saldo SAC hoje */
+const JP_SAC_END_YR=18;         /* anos para SAC zerar (fev/2044) */
+const SANTOS=0.500;             /* MM parte dela */
+const IMO_RATE_NOM=0.06;        /* 6% a.a. nominal */
 
-/* HELPERS */
-function fmtMM(v,d=2){return 'R$'+v.toFixed(d).replace('.',',')+'MM';}
+let bonuses=Array.from({length:ANOS+1},()=>500);
+bonuses[0]=474.655;
+
+function fmtMM(v,d=2){return 'R$'+(v).toFixed(d).replace('.',',')+'MM';}
 function fmtNom(v){return 'R$'+v.toFixed(1).replace('.',',')+'MM';}
+function fmt0(v){return 'R$'+Math.round(v)+'MM';}
 
-/* NAV */
 function sp(n){
   [1,2,3,4,5].forEach(i=>{
     document.getElementById('p'+i).className='pg'+(i===n?' on':'');
     document.getElementById('b'+i).className='nb'+(i===n?' on':'');
   });
-  if(n===1&&!C.sac)initP1();
   if(n===2&&!C.ntnb){createTable2();initNTNBChart();upd2();}
   if(n===3&&!C.intl)initIntl();
-  if(n===4&&!C.wlC){buildWL();initWLChart();}
-  if(n===5&&!C.main){initDash();upd5();}
+  if(n===4&&!C.main){initDash();upd5();}
 }
 
-/* ── P1 ── */
-function initP1(){
-  const s0=2438906,am=11344,tm=0.009295,dy=46;
-  const yrs=[],parc=[],dyA=[];let s=s0;
-  for(let m=0;m<=214;m+=12){
-    yrs.push(2026+Math.floor(m/12));
-    parc.push(Math.round((am+s*tm+192)/100)/10);
-    dyA.push(dy);s=Math.max(0,s-am*12);
-  }
-  C.sac=new Chart(document.getElementById('sacChart'),{type:'line',
-    data:{labels:yrs,datasets:[
-      {label:'Parcela SAC',data:parc,borderColor:'#1B3A6B',backgroundColor:'rgba(27,58,107,.06)',fill:'origin',tension:.35,pointRadius:3,pointBackgroundColor:'#1B3A6B'},
-      {label:'DY',data:dyA,borderColor:'#C9A84C',borderWidth:1.5,borderDash:[6,3],pointRadius:0,fill:false},
-      {label:'Folga',data:dyA.map((d,i)=>Math.round((d-parc[i])*10)/10),borderColor:'rgba(29,158,117,0)',backgroundColor:'rgba(29,158,117,.12)',fill:'-2',tension:.35,pointRadius:0}
+/* HISTORICO DIVIDENDOS */
+function initDivChart(){
+  if(C.div)return;
+  const lbls=['Jan/26','Fev/26','Mar/26','Abr/26','Mai/26','Jun/26','Jul/26','Ago/26','Set/26','Out/26','Nov/26','Dez/26'];
+  const realizado=[null,null,43.9,43.9,null,null,null,null,null,null,null,null];
+  const projetado=[null,null,null,null,28.5,47.0,50.5,52.4,52.4,52.7,52.7,52.7];
+  const target=Array(12).fill(56.4);
+  C.div=new Chart(document.getElementById('divChart'),{type:'bar',
+    data:{labels:lbls,datasets:[
+      {label:'Realizado',data:realizado,backgroundColor:'rgba(29,158,117,.8)',borderColor:'#1D9E75',borderWidth:1.5,borderRadius:4,categoryPercentage:0.7,barPercentage:0.9},
+      {label:'Projetado',data:projetado,backgroundColor:'rgba(201,168,76,.55)',borderColor:'#C9A84C',borderWidth:1.5,borderRadius:4,categoryPercentage:0.7,barPercentage:0.9},
+      {type:'line',label:'Alvo R$56,4k',data:target,borderColor:'#E24B4A',borderWidth:1.5,borderDash:[6,3],pointRadius:0,fill:false}
     ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{
-      title:i=>'Ano '+i[0].label,
-      label:c=>{if(c.datasetIndex===0)return 'Parcela média: R$ '+c.parsed.y.toFixed(1)+'k/mês';if(c.datasetIndex===1)return 'DY mensal: R$ '+c.parsed.y.toFixed(1)+'k';return 'Folga: R$ '+c.parsed.y.toFixed(1)+'k/mês';}
-    }}},
-    scales:{x:{ticks:{font:{size:10}},grid:{color:'rgba(0,0,0,.03)'}},y:{min:0,max:58,ticks:{callback:v=>'R$'+v+'k',font:{size:10}},grid:{color:'rgba(0,0,0,.03)'}}}
-  }});
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12,padding:8}},tooltip:{callbacks:{label:c=>{if(c.dataset.label==='Alvo R$56,4k')return 'Alvo: R$ 56,4k';if(c.parsed.y===null)return null;return c.dataset.label+': R$ '+c.parsed.y.toFixed(1)+'k';}}}},
+      scales:{x:{ticks:{font:{size:10}},grid:{display:false}},y:{min:0,max:65,ticks:{callback:v=>'R$'+v+'k',font:{size:10}},grid:{color:'rgba(0,0,0,.04)'}}}}
+  });
 }
 
-/* ── P2 ── */
-function rateFor(i,r3a,r3b){return i<=11?r3a:r3b;} /* 2027-2037 = years 1-11, 2037-2046 = years 12-20 */
+/* ========================
+   CÁLCULO CENTRAL · LÍQUIDO
+   ========================
+   Para cada ano:
+   - NTN-B: cresce 6,44% real + aporte NTN-B
+   - Free Float: cresce 3,5% real + (bônus - aporte NTN-B)
+   - Stable (carteira renda + reserva + internacional): mantém poder de compra
+   = LÍQUIDO TOTAL
+*/
+function projectLiquid(aporteBonus, aporteNtnb){
+  /* aporteBonus e aporteNtnb em MM */
+  const aporteFf = Math.max(0, aporteBonus - aporteNtnb);
+  let ntnb = T1_INITIAL;
+  let ff = 0;
+  const stable = STABLE;
+  const out=[{year:2026, age:45, ntnb, ff, stable, liq: ntnb+ff+stable}];
+  for(let i=1;i<=ANOS;i++){
+    ntnb = ntnb*(1+R1) + aporteNtnb;
+    ff = ff*(1+FF_REAL) + aporteFf;
+    out.push({year:2026+i, age:45+i, ntnb, ff, stable, liq: ntnb+ff+stable});
+  }
+  return out;
+}
+
+function findCrossover(traj, target){
+  for(let i=0;i<traj.length;i++){
+    if(traj[i].liq >= target){
+      if(i===0) return {year: traj[0].year, age: traj[0].age, hit:true};
+      /* interpolação linear entre i-1 e i */
+      const prev = traj[i-1].liq;
+      const cur = traj[i].liq;
+      const frac = (target - prev) / (cur - prev);
+      const year = traj[i-1].year + frac;
+      const age = traj[i-1].age + frac;
+      return {year: year, age: age, hit:true};
+    }
+  }
+  return {hit:false};
+}
+
+function formatCrossover(co){
+  if(!co.hit) return {date:'após 2046', age:'não atinge no horizonte'};
+  const yr = Math.floor(co.year);
+  const ageFloor = Math.floor(co.age);
+  return {date: ''+yr, age: ageFloor+' anos'};
+}
+
+function computeHero(){
+  /* 4 cenários */
+  const scenarios = [
+    {label:'low', bonus:1.0, ntnb:0.5, target:'sc-low'},
+    {label:'base', bonus:1.5, ntnb:0.5, target:'sc-base'},
+    {label:'high', bonus:2.0, ntnb:0.5, target:'sc-high'},
+    {label:'zero', bonus:0, ntnb:0, target:'sc-zero'}
+  ];
+  scenarios.forEach(s=>{
+    const t = projectLiquid(s.bonus, s.ntnb);
+    const co = findCrossover(t, 20);
+    const fmt = formatCrossover(co);
+    document.getElementById(s.target).textContent = fmt.date;
+    document.getElementById(s.target+'-age').textContent = fmt.age;
+  });
+  /* HERO principal = cenário base */
+  const tBase = projectLiquid(1.5, 0.5);
+  const coBase = findCrossover(tBase, 20);
+  if(coBase.hit){
+    const yr = Math.floor(coBase.year);
+    const age = Math.floor(coBase.age);
+    document.getElementById('hero-date').textContent = yr;
+    document.getElementById('hero-age').textContent = ' · '+age+' anos';
+    const yrsFromNow = yr - 2026;
+    const nomFactor = Math.pow(1+IPCA, yrsFromNow);
+    document.getElementById('hero-nom').textContent = 'R$ '+(20*nomFactor).toFixed(1).replace('.',',')+' MM';
+  }
+}
+
+function rateFor(i,r3a,r3b){return i<=11?r3a:r3b;}
 
 function calcNTNB_model(r3a,r3b){
   let t1=bonuses[0]/1000,t2=0,rows=[];
   rows.push({t1,t2,tot:t1});
   for(let i=1;i<=ANOS;i++){
-    t1=t1*(1+R1); /* B2050 compounding throughout - no maturity reinvestment needed until 2050 */
+    t1=t1*(1+R1);
     const r=rateFor(i,r3a,r3b);
     t2=t2*(1+r)+bonuses[i]/1000;
     rows.push({t1:Math.round(t1*100)/100,t2:Math.round(t2*100)/100,tot:Math.round((t1+t2)*100)/100});
   }
   return rows;
 }
-
 function createTable2(){
   const body=document.getElementById('ap-body');body.innerHTML='';
   for(let i=0;i<=ANOS;i++){
@@ -651,8 +932,8 @@ function createTable2(){
     const tr=document.createElement('tr');
     if(is0)tr.className='rg';else if(is20)tr.className='rn';else if(is11)tr.className='rr';
     const note=is0?' · Principal B2050 🔒':is11?' · Revisão para IPCA+4%':is20?' · ★ Aposentadoria 65a':'';
-    const ap=is0?`<span style="font-size:12px;font-weight:700;color:var(--gd)">R$500k ✓</span>`:`<input class="api" type="number" min="0" max="2000" step="50" value="${bonuses[i]}" data-idx="${i}" oninput="chAp(this)">`;
-    tr.innerHTML=`<td>${yr}&thinsp;(${age}a)${note}</td><td>${ap}</td><td><span id="td1_${i}">—</span></td><td><span id="td2_${i}">—</span></td><td><span id="tdt_${i}">—</span></td><td><span id="tdn_${i}">—</span></td><td><span id="tdg_${i}" class="gnd">—</span></td>`;
+    const ap=is0?`<span style="font-size:12px;font-weight:700;color:var(--gd)">R$474.655 ✓</span>`:`<input class="api" type="number" min="0" max="2000" step="50" value="${bonuses[i]}" data-idx="${i}" oninput="chAp(this)">`;
+    tr.innerHTML=`<td>${yr}&thinsp;(${age}a)${note}</td><td>${ap}</td><td><span id="td1_${i}">—</span></td><td><span id="td2_${i}">—</span></td><td><span id="tdt_${i}">—</span></td><td><span id="tdn_${i}">—</span></td>`;
     body.appendChild(tr);
   }
 }
@@ -663,13 +944,9 @@ function upd2(){
   const r3a=parseFloat(document.getElementById('sl-r3a').value)/100;
   const r3b=parseFloat(document.getElementById('sl-r3b').value)/100;
   const ap=parseFloat(document.getElementById('sl-ap2').value)/1000;
-  const ipca=parseFloat(document.getElementById('sl-ip2').value)/100;
   document.getElementById('o-r3a').textContent=(r3a*100).toFixed(2).replace('.',',')+'%';
   document.getElementById('o-r3b').textContent=(r3b*100).toFixed(2).replace('.',',')+'%';
   document.getElementById('o-ap2').textContent='R$ '+(ap*1000).toFixed(0)+'k';
-  document.getElementById('o-ip2').textContent=(ipca*100).toFixed(2).replace('.',',')+'%';
-
-  /* Recalc using per-year bonuses */
   let t1=bonuses[0]/1000,t2=0,vals=[];
   vals.push({t1,t2,tot:t1});
   for(let i=1;i<=ANOS;i++){
@@ -679,29 +956,23 @@ function upd2(){
     vals.push({t1:Math.round(t1*100)/100,t2:Math.round(t2*100)/100,tot:Math.round((t1+t2)*100)/100});
   }
   const last=vals[ANOS];
-  const nomF=Math.pow(1+ipca,ANOS);
-
+  const nomF=Math.pow(1+IPCA,ANOS);
   document.getElementById('v-t1').textContent=fmtMM(last.t1);
   document.getElementById('v-tot-ntnb').textContent=fmtMM(last.tot);
-  /* optimistic using 6.61% */
   let t1o=bonuses[0]/1000,t2o=0;
   for(let i=1;i<=ANOS;i++){t1o=t1o*(1+R1);t2o=t2o*(1+0.0661)+bonuses[i]/1000;}
   document.getElementById('v-tot-opt').textContent=fmtMM(t1o+t2o);
   document.getElementById('v-nom2').textContent=fmtNom(last.tot*nomF);
-  document.getElementById('v-nom2-s').textContent='× '+nomF.toFixed(2)+' (IPCA '+(ipca*100).toFixed(2).replace('.',',')+'% × 20a)';
-
-  /* Update cells */
+  document.getElementById('v-nom2-s').textContent='× '+nomF.toFixed(2)+' (IPCA '+(IPCA*100).toFixed(2).replace('.',',')+'% × 20a)';
   for(let i=0;i<=ANOS;i++){
     const d=vals[i];
     const aR=Math.max(0,ANOS-i);
-    const nom=Math.round(d.tot*Math.pow(1+ipca,aR)*100)/100;
-    const gap=Math.max(0,Math.round((20-d.tot)*100)/100);
+    const nom=Math.round(d.tot*Math.pow(1+IPCA,aR)*100)/100;
     const g=id=>document.getElementById(id+i);
     if(g('td1_'))g('td1_').textContent=fmtMM(d.t1);
     if(g('td2_'))g('td2_').textContent=d.t2>0?fmtMM(d.t2):'—';
     if(g('tdt_'))g('tdt_').textContent=fmtMM(d.tot);
     if(g('tdn_'))g('tdn_').textContent=fmtMM(nom);
-    const gE=g('tdg_');if(gE){gE.textContent=gap===0?'✓ Meta':fmtMM(gap);gE.className=gap===0?'gok':'gnd';}
   }
   if(C.ntnb){
     C.ntnb.data.datasets[0].data=vals.map(v=>v.t1);
@@ -718,231 +989,184 @@ function initNTNBChart(){
     data:{labels:lbls,datasets:[
       {label:'Track 1 Principal',data:rows.map(r=>r.t1),borderColor:'#C9A84C',backgroundColor:'rgba(201,168,76,.1)',fill:true,tension:.3,pointRadius:2},
       {label:'Track 2 Aportes',data:rows.map(r=>r.t2),borderColor:'#1B3A6B',backgroundColor:'rgba(27,58,107,.08)',fill:true,tension:.3,pointRadius:2},
-      {label:'Total',data:rows.map(r=>r.tot),borderColor:'#1D9E75',borderWidth:2.5,tension:.3,pointRadius:3,fill:false},
-      {label:'Meta R$20MM',data:Array(ANOS+1).fill(20),borderColor:'#E24B4A',borderWidth:1.5,borderDash:[6,3],pointRadius:0,fill:false}
+      {label:'Total',data:rows.map(r=>r.tot),borderColor:'#1D9E75',borderWidth:2.5,tension:.3,pointRadius:3,fill:false}
     ]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmtMM(c.parsed.y)}}},
-      scales:{x:{ticks:{font:{size:9},maxTicksLimit:11},grid:{color:'rgba(0,0,0,.03)'}},y:{min:0,max:24,ticks:{callback:v=>'R$'+v+'MM',font:{size:9}},grid:{color:'rgba(0,0,0,.03)'}}}
+      scales:{x:{ticks:{font:{size:9},maxTicksLimit:11},grid:{color:'rgba(0,0,0,.03)'}},y:{min:0,max:18,ticks:{callback:v=>'R$'+v+'MM',font:{size:9}},grid:{color:'rgba(0,0,0,.03)'}}}
   }});
 }
 
-/* ── P3 INTL ── */
 function initIntl(){
-  const r=0.044,init=76.9;
   const yrs=[],vals=[];
-  for(let i=0;i<=20;i++){yrs.push(2026+i);vals.push(Math.round(init*Math.pow(1+r,i)*10)/10);}
+  let acc=75.9; const aporteUsd=78; /* R$ 400k / 5.06 */
+  for(let i=0;i<=20;i++){
+    yrs.push(2026+i);
+    vals.push(Math.round(acc*10)/10);
+    acc = acc*1.044 + aporteUsd;
+  }
   C.intl=new Chart(document.getElementById('intlChart'),{type:'line',
     data:{labels:yrs,datasets:[{data:vals,borderColor:'#185FA5',backgroundColor:'rgba(24,95,165,.09)',fill:true,tension:.35,pointRadius:3}]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const yr=c.label;let n='';if(yr==='2034')n=' — Pedro 18a';if(yr==='2036')n=' — Joana 18a';return 'USD '+c.parsed.y.toFixed(1)+'k'+n;}}}},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const yr=c.label;let n='';if(yr==='2034')n=' — Pedro 18a';if(yr==='2036')n=' — Joana 18a';return 'USD '+c.parsed.y.toFixed(0)+'k'+n;}}}},
       scales:{x:{ticks:{font:{size:9},maxTicksLimit:11}},y:{ticks:{callback:v=>'USD '+v+'k',font:{size:9}},grid:{color:'rgba(0,0,0,.03)'}}}}
   });
 }
 
-/* ── P4 WL ── */
-const wlData=[
-  {yr:1,age:45,q:68474,r:0,obs:'Carência'},
-  {yr:3,age:47,q:205422,r:29295,obs:'Resgate inicia (3% fixo)'},
-  {yr:5,age:49,q:342371,r:150825,obs:''},
-  {yr:7,age:51,q:479319,r:314250,obs:''},
-  {yr:10,age:54,q:684742,r:723495,obs:'★ Resgate supera total pago'},
-  {yr:11,age:55,q:0,r:739995,obs:'Quitado — sem parcelas'},
-  {yr:16,age:60,q:0,r:826935,obs:'★ Aposentadoria 60a'},
-  {yr:21,age:65,q:0,r:938550,obs:'★ Meta do projeto (65a)'},
-  {yr:30,age:74,q:0,r:1096110,obs:''},
-  {yr:56,age:100,q:0,r:1500000,obs:'Resgate = Capital segurado'},
-];
-const IPCA_SIM=0.0615;
-
-function rSimWL(resgate_base,yr){
-  /* Prudential applies IPCA monthly over the 3% technical base */
-  return Math.round(resgate_base*Math.pow(1+IPCA_SIM,yr));
-}
-
-function buildWL(){
-  const body=document.getElementById('wl-body');body.innerHTML='';
-  wlData.forEach(d=>{
-    const tr=document.createElement('tr');
-    if(d.yr===10)tr.className='rn';
-    if(d.age===60||d.age===65)tr.className='rg';
-    const fmt=v=>v===0?'—':'R$ '+v.toLocaleString('pt-BR');
-    const rSim=d.r>0?'R$ '+rSimWL(d.r,d.yr).toLocaleString('pt-BR'):'—';
-    const win=d.r>d.q&&d.q>0;
-    const obsCol=d.obs.includes('★')?'color:var(--gr);font-weight:700':d.obs.includes('Carência')?'color:var(--rd)':'color:var(--text2)';
-    tr.innerHTML=`<td>Ano ${d.yr} (${d.age}a)</td><td>R$ 1.500.000</td><td>${d.q===0&&d.yr>10?'— quitado':fmt(d.q)}</td><td style="${win?'color:var(--gr);font-weight:700':''}">${fmt(d.r)}</td><td style="color:var(--gd);font-weight:${d.r>0?'700':'400'}">${rSim}</td><td style="font-size:11px;${obsCol}">${d.obs}</td>`;
-    body.appendChild(tr);
-  });
-}
-
-function initWLChart(){
-  const anos=wlData.map(d=>'Ano '+d.yr+' ('+d.age+'a)');
-  const resgate=wlData.map(d=>d.r/1000);
-  const rSim=wlData.map(d=>d.r>0?rSimWL(d.r,d.yr)/1000:0);
-  const quitado=wlData.map(d=>d.q/1000);
-  const capital=wlData.map(()=>1500);
-  C.wlC=new Chart(document.getElementById('wlChart'),{type:'line',
-    data:{labels:anos,datasets:[
-      {label:'Resgate tabela (3% fixo)',data:resgate,borderColor:'#1B3A6B',backgroundColor:'rgba(27,58,107,.08)',fill:true,tension:.35,pointRadius:4,pointBackgroundColor:'#1B3A6B'},
-      {label:'Resgate sim. (IPCA+3%)',data:rSim,borderColor:'#C9A84C',borderWidth:2,backgroundColor:'rgba(201,168,76,.06)',fill:true,tension:.35,pointRadius:4,pointBackgroundColor:'#C9A84C'},
-      {label:'Total pago',data:quitado,borderColor:'#888',borderWidth:1.5,borderDash:[5,3],tension:.35,pointRadius:2,fill:false},
-      {label:'Capital R$1,5MM',data:capital,borderColor:'#1D9E75',borderWidth:1,borderDash:[3,5],pointRadius:0,fill:false}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{labels:{font:{size:9},boxWidth:10,padding:6}},tooltip:{callbacks:{label:c=>'R$ '+c.parsed.y.toFixed(0)+'k'}}},
-      scales:{x:{ticks:{font:{size:9},maxRotation:30}},y:{ticks:{callback:v=>'R$'+v+'k',font:{size:9}},grid:{color:'rgba(0,0,0,.03)'}}}}
-  });
-}
-
-/* ── P5 DASHBOARD ── */
-function calcFF(ff,rf,ipca){
-  let acc=0,vals=[0];
-  for(let i=1;i<=ANOS;i++){acc=acc*(1+rf)+ff;vals.push(Math.round(acc/Math.pow(1+ipca,i)*100)/100);}
-  return vals;
-}
-function calcImovel(rate,ipca){
-  return YRS.map((_,i)=>{
-    const nom=5.25*Math.pow(1+rate,i);
-    const sac=i<18?Math.max(0,2.44*(1-i/18)):0;
-    return Math.round((nom-sac)/Math.pow(1+ipca,i)*100)/100;
-  });
+/* Imóveis: valor real ao longo do tempo */
+function calcImoveisReal(rateNom, ipca){
+  /* JP nominal: 5.25 * (1+rateNom)^n
+     SAC nominal: 2.44 * max(0, 1 - n/18)  (decai linear)
+     JP líquido nominal = JP - SAC
+     Santos nominal: 0.500 * (1+rateNom)^n
+     Total real = (JP_liq + Santos) / (1+ipca)^n */
+  const out=[];
+  for(let i=0;i<=ANOS;i++){
+    const jpNom = JP_MKT * Math.pow(1+rateNom, i);
+    const sacNom = JP_SAC_0 * Math.max(0, 1 - i/JP_SAC_END_YR);
+    const jpLiqNom = jpNom - sacNom;
+    const santosNom = SANTOS * Math.pow(1+rateNom, i);
+    const totalNom = jpLiqNom + santosNom;
+    const real = totalNom / Math.pow(1+ipca, i);
+    out.push({year:2026+i, jpLiqNom, santosNom, totalNom, real});
+  }
+  return out;
 }
 
 function initDash(){
-  const rows=calcNTNB_model(0.05,0.04);
-  const ffData=calcFF(1.2,0.10,0.0615);
-  const imData=calcImovel(0.07,0.0615);
-  const pfData=Array(ANOS+1).fill(4.9);
+  const tB = projectLiquid(1.5, 0.5);
+  const tA = projectLiquid(0, 0);
+  const im = calcImoveisReal(IMO_RATE_NOM, IPCA);
 
   C.main=new Chart(document.getElementById('mainChart'),{type:'line',
     data:{labels:YRS,datasets:[
-      {label:'NTN-B',data:rows.map(r=>r.tot),borderColor:'#1B3A6B',backgroundColor:'rgba(27,58,107,.12)',fill:true,tension:.35,pointRadius:2},
-      {label:'Free Float',data:ffData,borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,.10)',fill:true,tension:.35,pointRadius:2},
-      {label:'Imóvel',data:imData,borderColor:'#C9A84C',backgroundColor:'rgba(201,168,76,.10)',fill:true,tension:.35,pointRadius:2},
-      {label:'Project Finance',data:pfData,borderColor:'#185FA5',backgroundColor:'rgba(24,95,165,.07)',fill:true,tension:0,pointRadius:0},
-      {label:'Meta R$20MM',data:Array(ANOS+1).fill(20),borderColor:'#E24B4A',borderWidth:1.5,borderDash:[6,3],pointRadius:0,fill:false}
+      {label:'NTN-B (B)',data:tB.map(d=>d.ntnb),borderColor:'#1B3A6B',backgroundColor:'rgba(27,58,107,.12)',fill:true,tension:.35,pointRadius:2,stack:'B'},
+      {label:'Free Float (B)',data:tB.map(d=>d.ff),borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,.12)',fill:true,tension:.35,pointRadius:2,stack:'B'},
+      {label:'Carteira Renda (B)',data:tB.map(d=>d.stable),borderColor:'#185FA5',backgroundColor:'rgba(24,95,165,.10)',fill:true,tension:.35,pointRadius:0,stack:'B'},
+      {label:'Imóveis (B)',data:im.map(d=>d.real),borderColor:'#C9A84C',backgroundColor:'rgba(201,168,76,.10)',fill:true,tension:.35,pointRadius:2,stack:'B'},
+      {label:'Meta R$ 20MM líquido',data:Array(ANOS+1).fill(20),borderColor:'#E24B4A',borderWidth:1.5,borderDash:[6,3],pointRadius:0,fill:false}
     ]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{label:c=>{if(c.datasetIndex===4)return 'Meta NTN-B: R$20MM real';return c.dataset.label+': '+fmtMM(c.parsed.y);}}}},
-      scales:{x:{ticks:{font:{size:9},maxTicksLimit:11},grid:{color:'rgba(0,0,0,.03)'}},y:{min:0,ticks:{callback:v=>'R$'+v+'MM',font:{size:9}},grid:{color:'rgba(0,0,0,.03)'}}}}
-  });
-
-  C.ntnbD=new Chart(document.getElementById('ntnbChartD'),{type:'line',
-    data:{labels:YRS,datasets:[
-      {label:'Track 1 Principal',data:rows.map(r=>r.t1),borderColor:'#C9A84C',backgroundColor:'rgba(201,168,76,.12)',fill:true,tension:.35,pointRadius:2},
-      {label:'Track 2 Aportes',data:rows.map(r=>r.t2),borderColor:'#1B3A6B',backgroundColor:'rgba(27,58,107,.09)',fill:true,tension:.35,pointRadius:2},
-      {label:'Meta R$20MM',data:Array(ANOS+1).fill(20),borderColor:'#E24B4A',borderWidth:1,borderDash:[5,3],pointRadius:0,fill:false}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{labels:{font:{size:9},boxWidth:10,padding:5}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmtMM(c.parsed.y)}}},
-      scales:{x:{ticks:{font:{size:9},maxTicksLimit:11}},y:{min:0,ticks:{callback:v=>'R$'+v+'MM',font:{size:9}},grid:{color:'rgba(0,0,0,.03)'}}}}
-  });
-
-  C.ff=new Chart(document.getElementById('ffChart'),{type:'line',
-    data:{labels:YRS,datasets:[{label:'Free Float Real',data:ffData,borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,.11)',fill:true,tension:.35,pointRadius:2}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmtMM(c.parsed.y)}}},
-    scales:{x:{ticks:{font:{size:9},maxTicksLimit:11}},y:{min:0,ticks:{callback:v=>'R$'+v+'MM',font:{size:9}},grid:{color:'rgba(0,0,0,.03)'}}}}
-  });
-
-  C.im=new Chart(document.getElementById('imChart'),{type:'line',
-    data:{labels:YRS,datasets:[{label:'PL Imóvel (real)',data:imData,borderColor:'#C9A84C',backgroundColor:'rgba(201,168,76,.12)',fill:true,tension:.35,pointRadius:2}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmtMM(c.parsed.y)}}},
-    scales:{x:{ticks:{font:{size:9},maxTicksLimit:11}},y:{min:0,ticks:{callback:v=>'R$'+v+'MM',font:{size:9}},grid:{color:'rgba(0,0,0,.03)'}}}}
+      plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{label:c=>{if(c.datasetIndex===4)return 'Meta: R$20MM real líquido';return c.dataset.label+': '+fmtMM(c.parsed.y);}}}},
+      scales:{x:{ticks:{font:{size:9},maxTicksLimit:11},grid:{color:'rgba(0,0,0,.03)'}},y:{min:0,stacked:true,ticks:{callback:v=>'R$'+v+'MM',font:{size:9}},grid:{color:'rgba(0,0,0,.03)'}}}}
   });
 }
 
 function upd5(){
   if(!document.getElementById('sl-ap'))return;
+  const bon=parseFloat(document.getElementById('sl-bon').value);
   const ap=parseFloat(document.getElementById('sl-ap').value)/1000;
-  const r3a=parseFloat(document.getElementById('sl-r3a-d').value)/100;
-  const r3b=parseFloat(document.getElementById('sl-r3b-d').value)/100;
-  const ff=parseFloat(document.getElementById('sl-ff').value);
   const rf=parseFloat(document.getElementById('sl-rf').value)/100;
   const im=parseFloat(document.getElementById('sl-im').value)/100;
   const ipca=parseFloat(document.getElementById('sl-ip').value)/100;
 
-  document.getElementById('o-ap').textContent='R$ '+(ap*1000).toFixed(0)+'k';
-  document.getElementById('o-r3a-d').textContent=(r3a*100).toFixed(2).replace('.',',')+'%';
-  document.getElementById('o-r3b-d').textContent=(r3b*100).toFixed(2).replace('.',',')+'%';
-  document.getElementById('o-ff').textContent='R$ '+ff.toFixed(1).replace('.',',')+'MM';
+  /* ensure aporte NTN-B <= bonus */
+  let apFin = Math.min(ap, bon);
+  document.getElementById('o-bon').textContent='R$ '+bon.toFixed(1).replace('.',',')+'MM';
+  document.getElementById('o-ap').textContent='R$ '+(apFin*1000).toFixed(0)+'k';
   document.getElementById('o-rf').textContent=(rf*100).toFixed(1).replace('.',',')+'%';
   document.getElementById('o-im').textContent=(im*100).toFixed(1).replace('.',',')+'%';
   document.getElementById('o-ip').textContent=(ipca*100).toFixed(2).replace('.',',')+'%';
 
-  /* Calc with uniform bonuses */
-  let t1=ap,t2=0,ntnbVals=[];ntnbVals.push({t1,t2,tot:t1});
-  for(let i=1;i<=ANOS;i++){
-    t1=t1*(1+R1);const r=rateFor(i,r3a,r3b);t2=t2*(1+r)+ap;
-    ntnbVals.push({t1:Math.round(t1*100)/100,t2:Math.round(t2*100)/100,tot:Math.round((t1+t2)*100)/100});
+  /* CENÁRIO B = manter ritmo conforme parâmetros */
+  /* projectLiquid usa FF_REAL fixo; recalcular com rf custom */
+  function projectCustom(bonus, ntnbApo, ffRealRate, stableInit){
+    const apFf = Math.max(0, bonus - ntnbApo);
+    let ntnb=T1_INITIAL, ff=0;
+    const out=[{year:2026, age:45, ntnb, ff, stable:stableInit, liq:ntnb+ff+stableInit}];
+    for(let i=1;i<=ANOS;i++){
+      ntnb=ntnb*(1+R1)+ntnbApo;
+      ff=ff*(1+ffRealRate)+apFf;
+      out.push({year:2026+i, age:45+i, ntnb, ff, stable:stableInit, liq:ntnb+ff+stableInit});
+    }
+    return out;
   }
-  const ffData=calcFF(ff,rf,ipca);
-  const imData=calcImovel(im,ipca);
-  const pfData=Array(ANOS+1).fill(4.9);
+  const ffRealRate = (1+rf)/(1+ipca) - 1;
+  const tB = projectCustom(bon, apFin, ffRealRate, STABLE);
+  const tA = projectCustom(0, 0, ffRealRate, STABLE);
+  const imData = calcImoveisReal(im, ipca);
 
-  const ntnb65=ntnbVals[ANOS].tot;
-  const ff65=ffData[ANOS];
-  const im65=imData[ANOS];
-  const tot65=Math.round((ntnb65+ff65+im65+4.9)*100)/100;
-  const nF=Math.pow(1+ipca,ANOS);
-  const imNom=5.25*Math.pow(1+im,ANOS);
+  /* CENÁRIO A vs B em 2046 */
+  const last_A = tA[ANOS];
+  const last_B = tB[ANOS];
+  const im46 = imData[ANOS].real;
 
-  /* Cards */
-  document.getElementById('c-ntnb').textContent=fmtMM(ntnb65);
-  document.getElementById('n-ntnb').textContent=fmtNom(ntnb65*nF);
-  document.getElementById('c-ff').textContent=fmtMM(ff65);
-  document.getElementById('n-ff').textContent=fmtNom(ff65*nF);
-  document.getElementById('c-im').textContent=fmtMM(im65);
-  document.getElementById('n-im').textContent=fmtNom(imNom);
-  document.getElementById('c-tot').textContent=fmtMM(tot65);
-  document.getElementById('n-tot').textContent=fmtNom(tot65*nF);
-  document.getElementById('n-tot-s').textContent='equivalente a R$'+Math.round(tot65*nF)+'MM nominais de 2046';
-  document.getElementById('c-tot-s').textContent=tot65>=20?'✓ Meta R$20MM real atingida pelo conjunto':'patrimônio total consolidado';
-  document.getElementById('im-2046').textContent=fmtNom(imNom)+' nominal';
-  document.getElementById('meta-val').textContent=fmtMM(ntnb65)+' real';
-  document.getElementById('ff-val').textContent=fmtMM(ff65)+' real';
-  /* optimistic NTN-B */
-  let t1o=ap,t2o=0;for(let i=1;i<=ANOS;i++){t1o=t1o*(1+R1);t2o=t2o*(1+0.0661)+ap;}
-  document.getElementById('meta-opt').textContent=fmtMM(t1o+t2o)+' real';
+  document.getElementById('sa-liq').textContent = fmtMM(last_A.liq);
+  document.getElementById('sb-liq').textContent = fmtMM(last_B.liq);
+  document.getElementById('sa-imo').textContent = fmtMM(im46);
+  document.getElementById('sb-imo').textContent = fmtMM(im46);
+  document.getElementById('sa-tot').textContent = fmtMM(last_A.liq + im46);
+  document.getElementById('sb-tot').textContent = fmtMM(last_B.liq + im46);
 
+  const coA = findCrossover(tA, 20);
+  const coB = findCrossover(tB, 20);
+  const fmtA = formatCrossover(coA);
+  const fmtB = formatCrossover(coB);
+  document.getElementById('sa-date').textContent = coA.hit ? fmtA.date + ' · ' + fmtA.age : 'após 2046';
+  document.getElementById('sb-date').textContent = coB.hit ? fmtB.date + ' · ' + fmtB.age : 'após 2046';
+
+  const diff = last_B.liq - last_A.liq;
+  document.getElementById('diff-val').textContent = '+' + fmtMM(diff) + ' a mais';
+
+  /* CARDS por componente em 2046 */
+  document.getElementById('c-ntnb').textContent = fmtMM(last_B.ntnb);
+  document.getElementById('c-ff').textContent = fmtMM(last_B.ff);
+  document.getElementById('c-im').textContent = fmtMM(im46);
+  document.getElementById('c-liq').textContent = fmtMM(last_B.liq);
+  document.getElementById('c-liq-s').textContent = last_B.liq>=20 ? '✓ Meta R$ 20MM atingida e superada' : 'poder de compra de 2026';
+
+  const nF = Math.pow(1+ipca, ANOS);
+  document.getElementById('n-ntnb').textContent = fmtNom(last_B.ntnb * nF);
+  document.getElementById('n-ff').textContent = fmtNom(last_B.ff * nF);
+  document.getElementById('n-im').textContent = fmtNom(imData[ANOS].totalNom);
+  document.getElementById('n-liq').textContent = fmtNom(last_B.liq * nF);
+  document.getElementById('n-liq-s').textContent = 'equivalente a R$ ' + Math.round(last_B.liq*nF) + 'MM nominais de 2046';
+
+  /* CHART */
   if(C.main){
-    C.main.data.datasets[0].data=ntnbVals.map(v=>v.tot);
-    C.main.data.datasets[1].data=ffData;
-    C.main.data.datasets[2].data=imData;
-    C.main.data.datasets[3].data=pfData;
+    C.main.data.datasets[0].data = tB.map(d=>d.ntnb);
+    C.main.data.datasets[1].data = tB.map(d=>d.ff);
+    C.main.data.datasets[2].data = tB.map(d=>d.stable);
+    C.main.data.datasets[3].data = imData.map(d=>d.real);
     C.main.update('none');
   }
-  if(C.ntnbD){C.ntnbD.data.datasets[0].data=ntnbVals.map(v=>v.t1);C.ntnbD.data.datasets[1].data=ntnbVals.map(v=>v.t2);C.ntnbD.update('none');}
-  if(C.ff){C.ff.data.datasets[0].data=ffData;C.ff.update('none');}
-  if(C.im){C.im.data.datasets[0].data=imData;C.im.update('none');}
+
+  /* HERO recompute */
+  computeHero();
 }
 
-/* RESET FUNCTIONS */
 function resetP2(){
-  // Reset sliders
   document.getElementById("sl-r3a").value=5.0;
   document.getElementById("sl-r3b").value=4.0;
   document.getElementById("sl-ap2").value=500;
-  document.getElementById("sl-ip2").value=6.15;
-  // Reset all bonuses
-  for(let i=0;i<=ANOS;i++){bonuses[i]=500;}
-  // Reset input fields in table
+  bonuses[0]=474.655;
+  for(let i=1;i<=ANOS;i++){bonuses[i]=500;}
   document.querySelectorAll(".api").forEach(el=>{
     const idx=parseInt(el.dataset.idx);
-    if(!isNaN(idx)){el.value=500;bonuses[idx]=500;}
+    if(!isNaN(idx)&&idx>0){el.value=500;bonuses[idx]=500;}
   });
   upd2();
 }
 function resetP5(){
+  document.getElementById("sl-bon").value=1.5;
   document.getElementById("sl-ap").value=500;
-  document.getElementById("sl-r3a-d").value=5.0;
-  document.getElementById("sl-r3b-d").value=4.0;
-  document.getElementById("sl-ff").value=1.2;
   document.getElementById("sl-rf").value=10.0;
-  document.getElementById("sl-im").value=7.0;
+  document.getElementById("sl-im").value=6.0;
   document.getElementById("sl-ip").value=6.15;
   upd5();
 }
+
 window.addEventListener("load",()=>{document.getElementById("gate-in").focus();});
+
+/* Tap-to-toggle tooltips on mobile (touch devices) */
+document.addEventListener('click', (e)=>{
+  if(e.target.classList && e.target.classList.contains('tip')){
+    document.querySelectorAll('.tip.show').forEach(el=>{ if(el!==e.target) el.classList.remove('show'); });
+    e.target.classList.toggle('show');
+  } else {
+    document.querySelectorAll('.tip.show').forEach(el=>el.classList.remove('show'));
+  }
+});
 </script>
 </body>
 </html>
